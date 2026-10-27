@@ -31,6 +31,26 @@
   img{max-width:100%;display:block}
   .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
 
+  /* ===== 최상단 띠 배너 ===== */
+  .topad{background:var(--surface)}
+  .topad-in{display:flex;height:78px}
+  .ta{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:0 16px 0 22px;position:relative;overflow:hidden;cursor:pointer;color:#1a1f27}
+  .ta-l{background:linear-gradient(90deg,#bfe8fb 0%,#dcf4ff 55%,#c6ebfb 100%)}
+  .ta-r{background:linear-gradient(90deg,#e6cdb4 0%,#f3e4d2 50%,#ead2bb 100%)}
+  .ta img{height:62px;width:auto;flex-shrink:0;align-self:flex-end;margin-bottom:6px;filter:drop-shadow(0 5px 6px rgba(0,0,0,.2));transition:transform .2s}
+  .ta:hover img{transform:translateY(-2px)}
+  .ta-txt{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;text-align:right;line-height:1.22;white-space:nowrap}
+  .ta-s{font-size:16px;font-weight:700;color:#1f2630}
+  .ta-txt b{font-size:21px;font-weight:900;letter-spacing:-.6px;color:#1b54c7}
+  .ta-txt b em{font-style:normal;color:#e5333a}
+  .ta-r .ta-txt b{font-size:24px;color:#2b1d10}
+  .ta-chev{font-size:30px;font-weight:300;line-height:1;color:rgba(0,0,0,.32);margin-left:6px;transition:color .2s}
+  .ta:hover .ta-chev{color:rgba(0,0,0,.6)}
+  @media(max-width:700px){
+    .ta-r{display:none}.topad-in{height:62px}.ta img{height:48px}
+    .ta-s{font-size:12.5px}.ta-txt b{font-size:16px}
+  }
+
   /* header */
   header.top{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
   .topbar{display:flex;align-items:center;gap:16px;height:80px}
@@ -244,6 +264,20 @@
 <body>
 
 <div id="app">
+  <div class="topad">
+    <div class="wrap topad-in">
+      <a class="ta ta-l" onclick="go('/products?category=가전디지털')" aria-label="번개배송 내일 도착 상품 보기">
+        <img src="images/cut/c101.webp" alt=""><img src="images/cut/c103.webp" alt="" style="height:66px">
+        <span class="ta-txt"><span class="ta-s">오늘 밤 12시까지 주문해도</span><b>⚡ 번개배송은 <em>내일 도착!</em></b></span>
+        <span class="ta-chev">›</span>
+      </a>
+      <a class="ta ta-r" onclick="go('/product/112')" aria-label="견과 선물세트 보기">
+        <img src="images/cut/c111.webp" alt="" style="height:68px"><img src="images/cut/c112.webp" alt="" style="height:60px">
+        <span class="ta-txt"><b>선물하기 좋은 견과세트</b></span>
+        <span class="ta-chev">›</span>
+      </a>
+    </div>
+  </div>
   <header class="top">
     <div class="wrap topbar">
       <a class="logo" href="#/" onclick="go('/')" aria-label="Oh!Pang">
