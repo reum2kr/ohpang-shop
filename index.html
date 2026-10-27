@@ -131,6 +131,27 @@
     .s-h{font-size:28px}.s-sub{font-size:15px}.swoosh{width:240px;top:64px}
   }
 
+  /* ===== 오른쪽 사이드 광고 (넓은 화면 전용) ===== */
+  .home-main{position:relative}
+  .side-ads{position:absolute;left:calc(100% + 16px);top:0;bottom:0;width:134px;display:none}
+  @media(min-width:1420px){.side-ads{display:block}}
+  .side-ads-in{position:sticky;top:140px}
+  .ad-page{display:flex;flex-direction:column;gap:10px;animation:adIn .35s ease}
+  @keyframes adIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .ad-card{position:relative;display:block;height:158px;border-radius:6px;padding:11px 11px 0;overflow:hidden;cursor:pointer;
+    color:#1a1f27;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:transform .15s,box-shadow .15s}
+  .ad-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.14)}
+  .ad-card.dark{color:#fff}
+  .ad-t{font-size:13px;font-weight:800;line-height:1.28;letter-spacing:-.4px}
+  .ad-t em{font-style:normal;color:var(--em,#2b6def)}
+  .ad-t.big{font-size:17px;line-height:1.15}
+  .ad-go{display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#2b6def;color:#fff;font-size:12px;font-weight:900;margin-top:6px;line-height:1}
+  .ad-card.dark .ad-go{background:#fff;color:#2b6def}
+  .ad-img{position:absolute;right:8px;bottom:7px;max-width:100px;max-height:84px;width:auto;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.2))}
+  .ad-pager{display:flex;align-items:center;justify-content:center;gap:10px;font-size:12px;color:var(--muted);margin-top:10px}
+  .ad-pager b{color:var(--ink)}
+  .ad-pager button{display:grid;place-items:center;width:22px;height:22px;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--ink);font-size:13px;line-height:1}
+
   /* sections + grid */
   .sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 14px}
   .sec-h h2{font-size:19px;margin:0;letter-spacing:-.4px}
@@ -460,7 +481,7 @@ window.addEventListener('hashchange', ()=>render());
 let curCat='전체';
 
 async function render(){
-  clearInterval(bnTimer);
+  clearInterval(bnTimer); clearInterval(adTimer);
   syncChrome();
   const v=document.getElementById('view');
   const raw=(location.hash.slice(1)||'/');
@@ -583,6 +604,53 @@ function bnStart(){
 }
 function bnPause(p){ bnPaused=p; }
 
+/* ===================== 오른쪽 사이드 광고 ===================== */
+const ADS = [
+  { t:'오늘만 특가<br><em>이어버드</em>', img:'c101', bg:'#ffe0c4', em:'#e8590c', link:'/product/101' },
+  { t:'따뜻하게<br><em>극세사 담요</em>', img:'c104', bg:'#d6ebf5', em:'#1971c2', link:'/product/104' },
+  { t:'집에서 즐기는<br><em>홈카페</em>', img:'c111', bg:'#f1e6d8', em:'#9c5b22', link:'/product/111' },
+  { t:'가을 러닝<br><em>최대 24%</em>', img:'c114', bg:'#ffe8a3', em:'#e8590c', link:'/product/114' },
+  { t:'<em>Oh!Pang</em><br><em>only</em>', big:true, img:'c102', bg:'#f3f4f7', em:'#2b6def', link:'/product/102' },
+  { t:'충전 걱정<br><em>이제 끝</em>', img:'c108', bg:'#d5f1fa', em:'#0b7285', link:'/product/108' },
+  { t:'주방 필수템<br><em>프라이팬</em>', img:'c120', bg:'#e6ebff', em:'#3b5bdb', link:'/product/120' },
+  { t:'금주의<br><em>특가왕</em>', img:'c107', bg:'#2f55f5', em:'#ffd43b', dark:true, link:'/products?category=홈/리빙' },
+  { t:'홈트 시작<br><em>요가매트</em>', img:'c115', bg:'#e3f6ea', em:'#2b8a3e', link:'/product/115' },
+  { t:'마음 전하는<br><em>견과 선물</em>', img:'c112', bg:'#fde6c8', em:'#d9480f', link:'/product/112' },
+  { t:'러닝 필수<br><em>양말 5팩</em>', img:'c106', bg:'#dff1ff', em:'#1864ab', link:'/product/106' },
+  { t:'매일 아침<br><em>번개특가</em>', img:'c103', bg:'#ff4e50', em:'#ffe066', dark:true, link:'/product/103' },
+];
+const AD_PER = 4;
+let adPage = 0, adTimer = null, adHover = false;
+function adCards(){
+  return ADS.slice(adPage*AD_PER, adPage*AD_PER+AD_PER).map(a=>`
+    <a class="ad-card${a.dark?' dark':''}" style="background:${a.bg};--em:${a.em}" onclick="go('${a.link}')">
+      <div class="ad-t${a.big?' big':''}">${a.t}</div><span class="ad-go">›</span>
+      <img class="ad-img" src="images/cut/${a.img}.webp" alt="">
+    </a>`).join('');
+}
+function sideAdsHTML(){
+  const n=Math.ceil(ADS.length/AD_PER);
+  return `<aside class="side-ads" aria-label="광고" onmouseenter="adHover=true" onmouseleave="adHover=false">
+    <div class="side-ads-in">
+      <div class="ad-page" id="adPage">${adCards()}</div>
+      <div class="ad-pager"><button onclick="adGo(-1)" aria-label="이전 광고">‹</button><span><b id="adNo">${adPage+1}</b>/${n}</span><button onclick="adGo(1)" aria-label="다음 광고">›</button></div>
+    </div></aside>`;
+}
+function adGo(d){
+  const n=Math.ceil(ADS.length/AD_PER); adPage=(adPage+d+n)%n;
+  const el=document.getElementById('adPage'); if(!el) return;
+  el.outerHTML=`<div class="ad-page" id="adPage">${adCards()}</div>`;
+  document.getElementById('adNo').textContent=adPage+1;
+  adStart();
+}
+function adStart(){
+  clearInterval(adTimer);
+  adTimer=setInterval(()=>{
+    if(!document.getElementById('adPage')){ clearInterval(adTimer); return; }
+    if(!adHover) adGo(1);
+  }, 7000);
+}
+
 /* ===================== 뷰: 홈 ===================== */
 async function viewHome(v){
   curCat='전체';
@@ -603,9 +671,13 @@ async function viewHome(v){
           <span>${b.list[0]}<br>${b.list[1]||''}</span><span class="th">${/\.(jpg|png|webp)$/.test(b.thumb)?`<img src="${b.thumb}" alt="">`:b.thumb}</span></button>`).join('')}
       </div>
     </div>
-    <div class="sec-h"><h2>오늘의 추천</h2><span>${all.length}개 상품</span></div>
-    <div class="grid">${all.map(cardHTML).join('')}</div>`;
+    <div class="home-main">
+      <div class="sec-h"><h2>오늘의 추천</h2><span>${all.length}개 상품</span></div>
+      <div class="grid">${all.map(cardHTML).join('')}</div>
+      ${sideAdsHTML()}
+    </div>`;
   bnPaused=false; bnGo(bnIdx); bnStart();
+  adHover=false; adStart();
 }
 
 function cardHTML(p){
