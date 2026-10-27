@@ -60,7 +60,8 @@
   .catrail button.on{color:var(--brand-ink);font-weight:800}
 
   /* ===== 메인 배너 캐러셀 (직각) ===== */
-  .banner{position:relative;height:300px;margin:18px 0;overflow:hidden;box-shadow:var(--shadow);background:#eef1f5}
+  .banner-wrap{position:relative;margin:18px 0}
+  .banner{position:relative;height:300px;margin:0;overflow:hidden;box-shadow:var(--shadow);background:#eef1f5}
   .slide{position:absolute;inset:0;display:flex;align-items:center;gap:20px;padding:0 190px 0 52px;
     opacity:0;visibility:hidden;transition:opacity .7s ease,visibility .7s;cursor:pointer;color:#1a1f27;overflow:hidden}
   .slide.on{opacity:1;visibility:visible}
@@ -86,6 +87,11 @@
   .bn-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:none;gap:6px;z-index:6}
   .bn-dots span{width:7px;height:7px;border-radius:4px;background:rgba(0,0,0,.25);cursor:pointer;transition:width .2s}
   .bn-dots span.on{background:#1a1f27;width:18px}
+  /* 넓은 화면: 리스트를 배너 밖 오른쪽 여백으로 */
+  @media(min-width:1420px){
+    .bn-list{right:auto;left:calc(100% + 16px)}
+    .slide{padding:0 64px 0 52px}
+  }
   /* 가을 전단지 슬라이드 */
   .slide.autumn{background:
       radial-gradient(130px 90px at 14% 56%, rgba(255,165,70,.55), transparent 72%),
@@ -550,7 +556,7 @@ function bnGo(i){
   const bn=document.getElementById('banner'); if(!bn) return;
   bnIdx=(i+BANNERS.length)%BANNERS.length;
   bn.querySelectorAll('.slide').forEach((s,k)=>s.classList.toggle('on',k===bnIdx));
-  bn.querySelectorAll('.bn-list button').forEach((s,k)=>s.classList.toggle('on',k===bnIdx));
+  document.querySelectorAll('.bn-list button').forEach((s,k)=>s.classList.toggle('on',k===bnIdx));
   bn.querySelectorAll('.bn-dots span').forEach((s,k)=>s.classList.toggle('on',k===bnIdx));
 }
 function bnStart(){
@@ -572,13 +578,15 @@ async function viewHome(v){
       ${m.pct>0?`<span class="hdisc">${m.pct}%</span>`:''}${m.rocket?'<span class="hbolt">⚡</span>':''}
       <div class="hemoji">${p.icon}</div><div class="hnm">${esc(p.name)}</div><div class="hpr">${won(p.price)}</div></div>`;}).join('');
   v.innerHTML=`
-    <div class="banner" id="banner" onmouseenter="bnPause(true)" onmouseleave="bnPause(false)">
-      ${BANNERS.map(b=>slideHTML(b,tiles)).join('')}
+    <div class="banner-wrap" onmouseenter="bnPause(true)" onmouseleave="bnPause(false)">
+      <div class="banner" id="banner">
+        ${BANNERS.map(b=>slideHTML(b,tiles)).join('')}
+        <div class="bn-dots">${BANNERS.map((b,i)=>`<span onclick="bnGo(${i})"></span>`).join('')}</div>
+      </div>
       <div class="bn-list">
         ${BANNERS.map((b,i)=>`<button aria-label="${esc(b.list.join(' '))}" onmouseenter="bnGo(${i})" onclick="go('${b.link}')">
           <span>${b.list[0]}<br>${b.list[1]||''}</span><span class="th">${b.thumb}</span></button>`).join('')}
       </div>
-      <div class="bn-dots">${BANNERS.map((b,i)=>`<span onclick="bnGo(${i})"></span>`).join('')}</div>
     </div>
     <div class="sec-h"><h2>오늘의 추천</h2><span>${all.length}개 상품</span></div>
     <div class="grid">${all.map(cardHTML).join('')}</div>`;
