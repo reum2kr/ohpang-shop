@@ -6,7 +6,7 @@ OWASP Top 10:2025 웹 취약점 분석 프로젝트의 **프론트엔드**입니
 
 ## 구성
 
-- 단일 파일 `index.html` (HTML/CSS/JS 인라인, 로고 이미지 내장) → GitHub Pages에 그대로 배포
+- `index.html` (HTML/CSS/JS 인라인, 로고 이미지 내장) + `images/` (상품 사진 p101~p120.jpg) → GitHub Pages에 그대로 배포
 - 백엔드 API가 준비되기 전에도 동작하도록 **목(mock) 데이터**로 구동됩니다. 브라우저 `localStorage`에 회원/주문/장바구니가 저장돼 흐름을 끝까지 체험할 수 있습니다.
 
 ## 페이지 / 기능
@@ -59,6 +59,6 @@ const CONFIG = {
 
 ## GitHub Pages 배포
 
-1. 저장소에 `index.html`(과 `README.md`)을 올립니다.
+1. 저장소에 `index.html`, `images/` 폴더(와 `README.md`)를 올립니다.
 2. Settings → Pages → Source를 `Deploy from a branch`, `main` / `/(root)`로 설정.
 3. `https://<사용자명>.github.io/<저장소명>/` 에서 접속됩니다.
