@@ -35,8 +35,12 @@
   .topad{background:var(--surface)}
   .topad-in{display:flex;height:78px}
   .ta{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:0 16px 0 22px;position:relative;overflow:hidden;cursor:pointer;color:#1a1f27}
-  .ta-l{background:linear-gradient(90deg,#bfe8fb 0%,#dcf4ff 55%,#c6ebfb 100%)}
-  .ta-r{background:linear-gradient(90deg,#e6cdb4 0%,#f3e4d2 50%,#ead2bb 100%)}
+  .ta-l{background:linear-gradient(90deg,#00a2ff 0%,#2cc2ff 55%,#0091ff 100%)}
+  .ta-r{background:linear-gradient(90deg,#ff6a1a 0%,#ff9a3c 50%,#ff7f1f 100%)}
+  .ta-l .ta-s,.ta-l .ta-txt b,.ta-r .ta-txt b{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.15)}
+  .ta-l .ta-txt b em{color:#ffe14d}
+  .ta .ta-chev{color:rgba(255,255,255,.7)}
+  .ta:hover .ta-chev{color:#fff}
   .ta img{height:62px;width:auto;flex-shrink:0;align-self:flex-end;margin-bottom:6px;filter:drop-shadow(0 5px 6px rgba(0,0,0,.2));transition:transform .2s}
   .ta:hover img{transform:translateY(-2px)}
   .ta-txt{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;text-align:right;line-height:1.22;white-space:nowrap}
@@ -76,8 +80,9 @@
   .catrail{display:flex;gap:4px;height:44px;align-items:center;overflow-x:auto;scrollbar-width:none}
   .catrail::-webkit-scrollbar{display:none}
   .catrail button{background:none;border:none;color:var(--ink);font-size:13.5px;font-weight:600;padding:7px 13px;border-radius:8px;white-space:nowrap}
-  .catrail button:hover{background:var(--bg);color:var(--brand-ink)}
-  .catrail button.on{color:var(--brand-ink);font-weight:800}
+  .catrail button:hover{background:color-mix(in srgb,var(--cc) 10%,transparent);color:var(--cc)}
+  .catrail button.on{color:var(--cc);font-weight:800;background:color-mix(in srgb,var(--cc) 13%,transparent)}
+  .catrail .cdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cc);margin-right:6px;vertical-align:1px}
 
   /* ===== 메인 배너 캐러셀 (직각) ===== */
   .banner-wrap{position:relative;margin:18px 0}
@@ -86,11 +91,13 @@
     opacity:0;visibility:hidden;transition:opacity .7s ease,visibility .7s;cursor:pointer;color:#1a1f27;overflow:hidden}
   .slide.on{opacity:1;visibility:visible}
   .s-left{position:relative;flex:1;min-width:0;z-index:3}
-  .s-tag{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:#1a1f27}
+  .s-tag{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--ink1,#1a1f27)}
   .s-tag .sep{opacity:.35;font-weight:400}
-  .s-h{margin:0;font-size:40px;line-height:1.18;letter-spacing:-1.4px;font-weight:900;color:#14181f}
+  .s-h{margin:0;font-size:40px;line-height:1.18;letter-spacing:-1.4px;font-weight:900;color:var(--ink1,#14181f)}
   .s-h em{font-style:normal;color:var(--sa,#2b6def)}
-  .s-sub{margin:14px 0 0;font-size:18px;font-weight:700;color:#2d3540}
+  .s-sub{margin:14px 0 0;font-size:18px;font-weight:700;color:var(--ink2,#2d3540)}
+  .ink-w .s-tag,.ink-w .s-h,.ink-w .s-sub{text-shadow:0 2px 12px rgba(0,0,0,.18)}
+  .ink-w .stamp{color:#fff;opacity:.75}
   .s-art{position:relative;flex:0 0 420px;height:100%;z-index:2}
   .s-em{position:absolute;line-height:1;filter:drop-shadow(0 16px 18px rgba(60,40,20,.22))}
   .s-prod{position:absolute;height:auto;max-width:none;filter:drop-shadow(0 18px 20px rgba(40,30,20,.25))}
@@ -118,17 +125,17 @@
   }
   /* 가을 전단지 슬라이드 */
   .slide.autumn{background:
-      radial-gradient(130px 90px at 14% 56%, rgba(255,165,70,.55), transparent 72%),
-      radial-gradient(150px 95px at 33% 50%, rgba(255,120,50,.40), transparent 72%),
-      radial-gradient(120px 80px at 60% 56%, rgba(243,150,70,.45), transparent 72%),
-      radial-gradient(175px 110px at 80% 50%, rgba(255,175,85,.52), transparent 72%),
-      linear-gradient(180deg,#bfe0ff 0%,#dcefff 28%,#fdeeda 64%,#f7ddbd 100%)}
+      radial-gradient(140px 95px at 14% 56%, rgba(255,140,30,.75), transparent 72%),
+      radial-gradient(160px 100px at 33% 50%, rgba(255,80,30,.6), transparent 72%),
+      radial-gradient(130px 85px at 60% 56%, rgba(255,120,20,.65), transparent 72%),
+      radial-gradient(185px 115px at 80% 50%, rgba(255,170,40,.75), transparent 72%),
+      linear-gradient(180deg,#38a8ff 0%,#7cc8ff 30%,#ffcf8f 64%,#ffab52 100%)}
   .slide.autumn::after{content:"";position:absolute;left:0;right:0;bottom:0;height:52px;
     background:repeating-linear-gradient(90deg,rgba(120,70,20,.12) 0 22px,transparent 22px 24px),linear-gradient(180deg,#cf945a,#a96a3b);
     box-shadow:inset 0 2px 0 rgba(255,255,255,.3),0 -1px 3px rgba(0,0,0,.12)}
   .slide .ribbon{display:inline-block;background:linear-gradient(180deg,#ff5a5f,#e5333a);color:#fff;font-weight:800;
     padding:11px 20px;border-radius:9px;font-size:22px;letter-spacing:-.5px;box-shadow:0 5px 14px rgba(229,51,58,.38)}
-  .slide .hero-date{margin:12px 0 12px;font-size:15px;font-weight:700;color:#8a4b1e}
+  .slide .hero-date{margin:12px 0 12px;font-size:15px;font-weight:800;color:#5c2400}
   .slide .pill{display:inline-block;background:#fff;color:var(--accent);padding:7px 14px;border-radius:30px;font-size:13px;font-weight:800;box-shadow:0 3px 10px rgba(0,0,0,.1)}
   .hero-show{display:flex;gap:12px;flex-shrink:0;z-index:2;align-self:flex-end;margin-bottom:36px}
   .hero-tile{width:122px;background:#fff;border-radius:12px;padding:14px 10px;color:#1a1f27;
@@ -175,6 +182,7 @@
   /* sections + grid */
   .sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 14px}
   .sec-h h2{font-size:19px;margin:0;letter-spacing:-.4px}
+  .sec-h h2::before{content:"";display:inline-block;width:6px;height:19px;border-radius:3px;background:linear-gradient(180deg,#ff3b5c,#ffb703);margin-right:9px;vertical-align:-3px}
   .sec-h span{font-size:12.5px;color:var(--muted)}
   .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
   @media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
@@ -344,6 +352,7 @@ async function http(method, path, body){
 
 /* ===================== 목(MOCK) 데이터 계층 =====================
    백엔드가 준비되면 이 블록은 사용되지 않습니다(USE_MOCK=false). */
+const CAT_COLOR = {'전체':'#2b6def','가전디지털':'#00a8ff','패션의류':'#ff3b5c','뷰티':'#ff2e9a','식품':'#ff8a00','홈/리빙':'#12b886','스포츠/레저':'#7048e8','유아동':'#f5b400','도서/음반':'#e64980'};
 const CATS = ['전체','가전디지털','패션의류','뷰티','식품','홈/리빙','스포츠/레저','유아동','도서/음반'];
 const MOCK_PRODUCTS = [
   {id:101,imageUrl:'images/p101.jpg',name:'Oh!Pang 무선 이어버드 Pro',category:'가전디지털',price:89000,stock:120,icon:'🎧',description:'하루 종일 편안한 노이즈 캔슬링 이어폰'},
@@ -562,7 +571,7 @@ function syncChrome(){
 }
 function renderCatRail(){
   const rail=document.getElementById('catRail'); if(!rail) return;
-  rail.innerHTML=CATS.map(c=>`<button class="${c===curCat?'on':''}" onclick="selectCat('${c}')">${c}</button>`).join('');
+  rail.innerHTML=CATS.map(c=>`<button class="${c===curCat?'on':''}" style="--cc:${CAT_COLOR[c]||'#2b6def'}" onclick="selectCat('${c}')"><i class="cdot"></i>${c}</button>`).join('');
 }
 function selectCat(c){ curCat=c; go(c==='전체'?'/':('/products?category='+encodeURIComponent(c))); }
 function doSearch(q){ curCat='전체'; go('/search?q='+encodeURIComponent(q||'')); }
@@ -571,29 +580,34 @@ function doSearch(q){ curCat='전체'; go('/search?q='+encodeURIComponent(q||'')
 // art: [이모지, 크기(px), left, top, 회전(deg)] — .s-art(420×300) 기준 배치
 const BANNERS = [
   { key:'welcome', list:['신규회원','웰컴딜 모음전'], thumb:'images/p108.jpg', link:'/register',
-    bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.6), transparent 70%),linear-gradient(90deg,#e8edff 0%,#dfe7ff 55%,#d3dfff 100%)',
-    accent:'#2b6def', tag:'🎉 Oh!Pang 신규 회원', h1:'처음 오셨나요?', h2:'웰컴딜 모음전', sub:'가입하고 인기 상품을 특가로 만나보세요',
+    bg:'radial-gradient(440px 260px at 72% 50%, rgba(255,255,255,.28), transparent 70%),linear-gradient(110deg,#2f6bff 0%,#5a4dff 55%,#8a3dff 100%)',
+    accent:'#ffe14d', ink:'#fff', subc:'rgba(255,255,255,.94)',
+    tag:'🎉 Oh!Pang 신규 회원', h1:'처음 오셨나요?', h2:'웰컴딜 모음전', sub:'가입하고 인기 상품을 특가로 만나보세요',
     art:[ {img:'c107',w:200,x:10,y:36,r:-4}, {img:'c108',w:118,x:290,y:6,r:6}, {img:'c102',w:310,x:40,y:150,r:0}, ['✨',40,236,40,0] ] },
   { key:'kids', list:['베이비&키즈','페스타'], thumb:'images/p118.jpg', link:'/products?category=유아동',
-    bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#e7f8ef 0%,#f3fadf 50%,#fff2c4 100%)',
-    accent:'#f08c00', tag:'🧸 베이비&키즈 페스타', h1:'우리 아이 웃음 가득', h2:'키즈 페스타 최대 30%', sub:'장난감·육아용품을 한 번에',
+    bg:'radial-gradient(440px 260px at 72% 50%, rgba(255,255,255,.38), transparent 70%),linear-gradient(110deg,#ffd60a 0%,#ffb703 55%,#ff9500 100%)',
+    accent:'#e5002b', ink:'#1a1300', subc:'#3d2a00',
+    tag:'🧸 베이비&키즈 페스타', h1:'우리 아이 웃음 가득', h2:'키즈 페스타 최대 30%', sub:'장난감·육아용품을 한 번에',
     art:[ ['✨',36,8,30,0], {img:'c118',w:250,x:20,y:40,r:-3}, {img:'c117',w:140,x:282,y:150,r:4}, ['🎈',60,335,18,10] ] },
   { key:'beauty', list:['뷰티','베스트 리뷰템'], thumb:'images/p110.jpg', link:'/products?category=뷰티',
-    bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#fdecf2 0%,#f8dcea 55%,#f0d0e4 100%)',
-    accent:'#d6336c', tag:'💄 Oh!Pang 뷰티관', h1:'피부가 먼저 아는', h2:'뷰티 베스트 리뷰템', sub:'리뷰 평점 4.5 이상 인기템 모음',
+    bg:'radial-gradient(440px 260px at 72% 50%, rgba(255,255,255,.32), transparent 70%),linear-gradient(110deg,#ff2e88 0%,#ff4fa3 55%,#ff78c0 100%)',
+    accent:'#fff04d', ink:'#fff', subc:'rgba(255,255,255,.95)',
+    tag:'💄 Oh!Pang 뷰티관', h1:'피부가 먼저 아는', h2:'뷰티 베스트 리뷰템', sub:'리뷰 평점 4.5 이상 인기템 모음',
     art:[ ['🌸',50,205,26,0], {img:'c110',w:170,x:30,y:72,r:-6}, {img:'c109',w:178,x:212,y:104,r:0}, ['🌸',34,388,236,20] ] },
   { key:'autumn', list:['환절기','생필품 특가'], thumb:'images/p104.jpg', link:'/products?category=홈/리빙' },
   { key:'buds', list:['이어버드 Pro','소음은 끄고'], thumb:'images/p101.jpg', link:'/product/101',
-    bg:'radial-gradient(380px 260px at 70% 55%, rgba(255,255,255,.65), transparent 70%),linear-gradient(180deg,#e3edf9 0%,#d2e1f3 100%)',
-    accent:'#1b54c7', tag:'<b>Oh!Pang 이어버드 Pro</b><span class="sep">|</span><span style="color:#1aa3ff">⚡ 번개배송</span>',
+    bg:'radial-gradient(400px 270px at 70% 55%, rgba(255,255,255,.34), transparent 70%),linear-gradient(110deg,#00c2ff 0%,#0091ff 55%,#0062ff 100%)',
+    accent:'#ffe14d', ink:'#fff', subc:'rgba(255,255,255,.95)',
+    tag:'<b>Oh!Pang 이어버드 Pro</b><span class="sep">|</span><span style="color:#ffe14d">⚡ 번개배송</span>',
     h1:'소음은 끄고', h2:'음악은 켜고', sub:'오늘 주문하면 내일 도착',
     art:[ ['🎵',46,40,50,-10], {img:'c101',w:190,x:120,y:22,r:-8}, ['✨',40,335,55,0], ['🎶',42,345,200,0] ] },
   { key:'food', list:['여권없이 즐기는','미식투어'], thumb:'images/p111.jpg', link:'/products?category=식품',
-    bg:'radial-gradient(500px 260px at 76% 40%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#fde7d8 0%,#f9d6c0 55%,#f1c6a6 100%)',
-    accent:'#1f7ae0', tag:'🍜 Oh!Pang 푸드관', h1:'여권 없이 즐기는', h2:'세계 미식투어', sub:'맛있는 세계여행 한 바퀴',
-    extra:'<svg class="swoosh" viewBox="0 0 340 46"><path d="M4 40 C 170 48, 262 44, 336 4" stroke="#2b8cf0" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><span style="position:absolute;left:318px;top:62px;font-size:34px;transform:rotate(-18deg)">✈️</span>',
+    bg:'radial-gradient(500px 260px at 76% 40%, rgba(255,255,255,.3), transparent 70%),linear-gradient(110deg,#ff4d2e 0%,#ff7a2a 50%,#ffa62b 100%)',
+    accent:'#23145f', ink:'#fff', subc:'rgba(255,255,255,.96)',
+    tag:'🍜 Oh!Pang 푸드관', h1:'여권 없이 즐기는', h2:'세계 미식투어', sub:'맛있는 세계여행 한 바퀴',
+    extra:'<svg class="swoosh" viewBox="0 0 340 46"><path d="M4 40 C 170 48, 262 44, 336 4" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><span style="position:absolute;left:318px;top:62px;font-size:34px;transform:rotate(-18deg)">✈️</span>',
     art:[ {img:'c111',w:112,x:40,y:14,r:-6}, {img:'c112',w:240,x:168,y:84,r:4} ],
-    deco:'<span class="stamp" style="left:500px;top:16px;color:#c0392b;transform:rotate(-14deg)">ROMA</span><span class="stamp" style="left:420px;bottom:26px;color:#2b6def;transform:rotate(10deg)">SEOUL</span>' },
+    deco:'<span class="stamp" style="left:500px;top:16px;transform:rotate(-14deg)">ROMA</span><span class="stamp" style="left:420px;bottom:26px;transform:rotate(10deg)">SEOUL</span>' },
 ];
 let bnIdx = 3, bnTimer = null, bnPaused = false;
 
@@ -613,7 +627,7 @@ function slideHTML(b, tiles){
     if(a.pod) return `<span class="podium" style="width:${a.d}px;height:${a.d}px;left:${a.x}px;top:${a.y}px"><img src="images/${a.pod}.jpg" alt=""></span>`;
     return '';
   }).join('');
-  return `<div class="slide" style="background:${b.bg};--sa:${b.accent}" onclick="go('${b.link}')">
+  return `<div class="slide${b.ink==='#fff'?' ink-w':''}" style="background:${b.bg};--sa:${b.accent};--ink1:${b.ink||'#14181f'};--ink2:${b.subc||'#2d3540'}" onclick="go('${b.link}')">
       <div class="s-left">
         <div class="s-tag">${b.tag}</div>
         <h2 class="s-h">${b.h1}<br><em>${b.h2}</em></h2>
@@ -640,18 +654,18 @@ function bnPause(p){ bnPaused=p; }
 
 /* ===================== 오른쪽 사이드 광고 ===================== */
 const ADS = [
-  { t:'오늘만 특가<br><em>이어버드</em>', img:'c101', bg:'#ffe0c4', em:'#e8590c', link:'/product/101' },
-  { t:'따뜻하게<br><em>극세사 담요</em>', img:'c104', bg:'#d6ebf5', em:'#1971c2', link:'/product/104' },
-  { t:'집에서 즐기는<br><em>홈카페</em>', img:'c111', bg:'#f1e6d8', em:'#9c5b22', link:'/product/111' },
-  { t:'가을 러닝<br><em>최대 24%</em>', img:'c114', bg:'#ffe8a3', em:'#e8590c', link:'/product/114' },
-  { t:'<em>Oh!Pang</em><br><em>only</em>', big:true, img:'c102', bg:'#f3f4f7', em:'#2b6def', link:'/product/102' },
-  { t:'충전 걱정<br><em>이제 끝</em>', img:'c108', bg:'#d5f1fa', em:'#0b7285', link:'/product/108' },
-  { t:'주방 필수템<br><em>프라이팬</em>', img:'c120', bg:'#e6ebff', em:'#3b5bdb', link:'/product/120' },
-  { t:'금주의<br><em>특가왕</em>', img:'c107', bg:'#2f55f5', em:'#ffd43b', dark:true, link:'/products?category=홈/리빙' },
-  { t:'홈트 시작<br><em>요가매트</em>', img:'c115', bg:'#e3f6ea', em:'#2b8a3e', link:'/product/115' },
-  { t:'마음 전하는<br><em>견과 선물</em>', img:'c112', bg:'#fde6c8', em:'#d9480f', link:'/product/112' },
-  { t:'러닝 필수<br><em>양말 5팩</em>', img:'c106', bg:'#dff1ff', em:'#1864ab', link:'/product/106' },
-  { t:'매일 아침<br><em>번개특가</em>', img:'c103', bg:'#ff4e50', em:'#ffe066', dark:true, link:'/product/103' },
+  { t:'오늘만 특가<br><em>이어버드</em>', img:'c101', bg:'linear-gradient(160deg,#ff8a3d,#ff5a1f)', em:'#ffe14d', dark:true, link:'/product/101' },
+  { t:'따뜻하게<br><em>극세사 담요</em>', img:'c104', bg:'linear-gradient(160deg,#3aa0ff,#1565ff)', em:'#ffe14d', dark:true, link:'/product/104' },
+  { t:'집에서 즐기는<br><em>홈카페</em>', img:'c111', bg:'linear-gradient(160deg,#c06a2b,#8a3f12)', em:'#ffd8a0', dark:true, link:'/product/111' },
+  { t:'가을 러닝<br><em>최대 24%</em>', img:'c114', bg:'linear-gradient(160deg,#ffe14d,#ffc400)', em:'#e5002b', link:'/product/114' },
+  { t:'<em>Oh!Pang</em><br><em>only</em>', big:true, img:'c102', bg:'linear-gradient(160deg,#1f2433,#0b0e17)', em:'#4dabff', dark:true, link:'/product/102' },
+  { t:'충전 걱정<br><em>이제 끝</em>', img:'c108', bg:'linear-gradient(160deg,#16d4c6,#00a3b4)', em:'#ffe14d', dark:true, link:'/product/108' },
+  { t:'주방 필수템<br><em>프라이팬</em>', img:'c120', bg:'linear-gradient(160deg,#8c5cff,#5b2fe0)', em:'#ffe14d', dark:true, link:'/product/120' },
+  { t:'금주의<br><em>특가왕</em>', img:'c107', bg:'linear-gradient(160deg,#3d63ff,#1f3fe0)', em:'#ffd43b', dark:true, link:'/products?category=홈/리빙' },
+  { t:'홈트 시작<br><em>요가매트</em>', img:'c115', bg:'linear-gradient(160deg,#22c98a,#0ca06a)', em:'#fff36b', dark:true, link:'/product/115' },
+  { t:'마음 전하는<br><em>견과 선물</em>', img:'c112', bg:'linear-gradient(160deg,#ff7a1a,#e8500c)', em:'#ffe066', dark:true, link:'/product/112' },
+  { t:'러닝 필수<br><em>양말 5팩</em>', img:'c106', bg:'linear-gradient(160deg,#ff4f93,#ff1f6e)', em:'#fff36b', dark:true, link:'/product/106' },
+  { t:'매일 아침<br><em>번개특가</em>', img:'c103', bg:'linear-gradient(160deg,#ff5a5f,#e5262c)', em:'#ffe066', dark:true, link:'/product/103' },
 ];
 const AD_PER = 4;
 let adPage = 0, adTimer = null, adHover = false;
