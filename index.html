@@ -73,6 +73,9 @@
   .s-sub{margin:14px 0 0;font-size:18px;font-weight:700;color:#2d3540}
   .s-art{position:relative;flex:0 0 420px;height:100%;z-index:2}
   .s-em{position:absolute;line-height:1;filter:drop-shadow(0 16px 18px rgba(60,40,20,.22))}
+  .s-prod{position:absolute;height:auto;max-width:none;filter:drop-shadow(0 18px 20px rgba(40,30,20,.25))}
+  .podium{position:absolute;display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 16px 30px rgba(40,30,20,.18);overflow:hidden}
+  .podium img{width:80%;height:80%;object-fit:contain}
   .stamp{position:absolute;border:2px dashed currentColor;font-weight:900;font-size:12px;letter-spacing:1.5px;padding:12px 12px;border-radius:50%;opacity:.45;z-index:1}
   .swoosh{position:absolute;left:-16px;top:96px;width:340px;height:46px;pointer-events:none;z-index:-1}
   /* 배너 사이드 리스트 */
@@ -81,7 +84,8 @@
   .bn-list button{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;height:42px;padding:0 8px 0 10px;
     border:none;border-bottom:1px solid #eef0f3;background:#fff;text-align:left;font-size:10.5px;line-height:1.3;color:#222;font-weight:600}
   .bn-list button:last-child{border-bottom:none}
-  .bn-list button .th{font-size:22px;flex-shrink:0}
+  .bn-list button .th{font-size:22px;flex-shrink:0;display:grid;place-items:center;width:30px;height:30px}
+  .bn-list button .th img{width:30px;height:30px;object-fit:contain}
   .bn-list button:hover{background:#f7f9fc}
   .bn-list button.on{box-shadow:inset 0 0 0 2px var(--brand)}
   .bn-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:none;gap:6px;z-index:6}
@@ -511,30 +515,30 @@ function doSearch(q){ curCat='전체'; go('/search?q='+encodeURIComponent(q||'')
 /* ===================== 메인 배너 (캐러셀 + 사이드 리스트) ===================== */
 // art: [이모지, 크기(px), left, top, 회전(deg)] — .s-art(420×300) 기준 배치
 const BANNERS = [
-  { key:'welcome', list:['신규회원','웰컴딜 모음전'], thumb:'🎉', link:'/register',
+  { key:'welcome', list:['신규회원','웰컴딜 모음전'], thumb:'images/p108.jpg', link:'/register',
     bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.6), transparent 70%),linear-gradient(90deg,#e8edff 0%,#dfe7ff 55%,#d3dfff 100%)',
     accent:'#2b6def', tag:'🎉 Oh!Pang 신규 회원', h1:'처음 오셨나요?', h2:'웰컴딜 모음전', sub:'가입하고 인기 상품을 특가로 만나보세요',
-    art:[['🎁',160,50,90,-8],['🛍️',112,235,140,8],['✨',56,250,46,0],['🎈',72,350,36,10]] },
-  { key:'kids', list:['베이비&키즈','페스타'], thumb:'🧸', link:'/products?category=유아동',
+    art:[ {img:'c107',w:200,x:10,y:36,r:-4}, {img:'c108',w:118,x:290,y:6,r:6}, {img:'c102',w:310,x:40,y:150,r:0}, ['✨',40,236,40,0] ] },
+  { key:'kids', list:['베이비&키즈','페스타'], thumb:'images/p118.jpg', link:'/products?category=유아동',
     bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#e7f8ef 0%,#f3fadf 50%,#fff2c4 100%)',
     accent:'#f08c00', tag:'🧸 베이비&키즈 페스타', h1:'우리 아이 웃음 가득', h2:'키즈 페스타 최대 30%', sub:'장난감·육아용품을 한 번에',
-    art:[['🧸',150,20,110,-6],['🧱',100,195,160,6],['🎨',80,305,80,10],['🍼',76,185,40,-14],['🧻',66,335,195,0]] },
-  { key:'beauty', list:['뷰티','베스트 리뷰템'], thumb:'💄', link:'/products?category=뷰티',
+    art:[ ['✨',36,8,30,0], {img:'c118',w:250,x:20,y:40,r:-3}, {pod:'p117',d:124,x:288,y:150}, ['🎈',60,335,18,10] ] },
+  { key:'beauty', list:['뷰티','베스트 리뷰템'], thumb:'images/p110.jpg', link:'/products?category=뷰티',
     bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#fdecf2 0%,#f8dcea 55%,#f0d0e4 100%)',
     accent:'#d6336c', tag:'💄 Oh!Pang 뷰티관', h1:'피부가 먼저 아는', h2:'뷰티 베스트 리뷰템', sub:'리뷰 평점 4.5 이상 인기템 모음',
-    art:[['🧴',150,40,100,-6],['💄',100,205,140,12],['🧼',80,305,60,0],['🌸',60,175,40,0],['🌸',44,355,205,20]] },
-  { key:'autumn', list:['환절기','생필품 특가'], thumb:'🍁', link:'/products?category=홈/리빙' },
-  { key:'buds', list:['이어버드 Pro','소음은 끄고'], thumb:'🎧', link:'/product/101',
+    art:[ ['🌸',50,205,26,0], {img:'c110',w:170,x:30,y:72,r:-6}, {pod:'p109',d:172,x:215,y:96}, ['🌸',34,388,236,20] ] },
+  { key:'autumn', list:['환절기','생필품 특가'], thumb:'images/p104.jpg', link:'/products?category=홈/리빙' },
+  { key:'buds', list:['이어버드 Pro','소음은 끄고'], thumb:'images/p101.jpg', link:'/product/101',
     bg:'radial-gradient(380px 260px at 70% 55%, rgba(255,255,255,.65), transparent 70%),linear-gradient(180deg,#e3edf9 0%,#d2e1f3 100%)',
     accent:'#1b54c7', tag:'<b>Oh!Pang 이어버드 Pro</b><span class="sep">|</span><span style="color:#1aa3ff">⚡ 번개배송</span>',
     h1:'소음은 끄고', h2:'음악은 켜고', sub:'오늘 주문하면 내일 도착',
-    art:[['🎧',200,95,45,-10],['🎵',46,40,50,-10],['✨',40,335,55,0],['🎶',42,345,200,0]] },
-  { key:'food', list:['여권없이 즐기는','미식투어'], thumb:'🍝', link:'/products?category=식품',
+    art:[ ['🎵',46,40,50,-10], {img:'c101',w:190,x:120,y:22,r:-8}, ['✨',40,335,55,0], ['🎶',42,345,200,0] ] },
+  { key:'food', list:['여권없이 즐기는','미식투어'], thumb:'images/p111.jpg', link:'/products?category=식품',
     bg:'radial-gradient(500px 260px at 76% 40%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#fde7d8 0%,#f9d6c0 55%,#f1c6a6 100%)',
     accent:'#1f7ae0', tag:'🍜 Oh!Pang 푸드관', h1:'여권 없이 즐기는', h2:'세계 미식투어', sub:'맛있는 세계여행 한 바퀴',
     extra:'<svg class="swoosh" viewBox="0 0 340 46"><path d="M4 40 C 170 48, 262 44, 336 4" stroke="#2b8cf0" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><span style="position:absolute;left:318px;top:62px;font-size:34px;transform:rotate(-18deg)">✈️</span>',
-    art:[['🍝',140,10,130,-6],['🥟',110,160,150,4],['🍨',100,290,120,0],['🧀',70,120,60,-12],['🥐',64,300,36,12]],
-    deco:'<span class="stamp" style="right:180px;bottom:28px;color:#c0392b;transform:rotate(-14deg)">ROMA</span><span class="stamp" style="left:420px;bottom:26px;color:#2b6def;transform:rotate(10deg)">SEOUL</span>' },
+    art:[ {img:'c111',w:112,x:40,y:14,r:-6}, {img:'c112',w:240,x:168,y:84,r:4} ],
+    deco:'<span class="stamp" style="left:500px;top:16px;color:#c0392b;transform:rotate(-14deg)">ROMA</span><span class="stamp" style="left:420px;bottom:26px;color:#2b6def;transform:rotate(10deg)">SEOUL</span>' },
 ];
 let bnIdx = 3, bnTimer = null, bnPaused = false;
 
@@ -548,7 +552,12 @@ function slideHTML(b, tiles){
       <div class="hero-show">${tiles}</div>
       <span class="leaf l1">🍁</span><span class="leaf l2">🍂</span><span class="leaf l3">🍁</span><span class="leaf l4">🍂</span>
     </div>`;
-  const art=(b.art||[]).map(([e,s,x,y,r])=>`<span class="s-em" style="font-size:${s}px;left:${x}px;top:${y}px;transform:rotate(${r}deg)">${e}</span>`).join('');
+  const art=(b.art||[]).map(a=>{
+    if(Array.isArray(a)){ const [e,s,x,y,r]=a; return `<span class="s-em" style="font-size:${s}px;left:${x}px;top:${y}px;transform:rotate(${r}deg)">${e}</span>`; }
+    if(a.img) return `<img class="s-prod" src="images/cut/${a.img}.webp" alt="" style="width:${a.w}px;left:${a.x}px;top:${a.y}px;transform:rotate(${a.r||0}deg)">`;
+    if(a.pod) return `<span class="podium" style="width:${a.d}px;height:${a.d}px;left:${a.x}px;top:${a.y}px"><img src="images/${a.pod}.jpg" alt=""></span>`;
+    return '';
+  }).join('');
   return `<div class="slide" style="background:${b.bg};--sa:${b.accent}" onclick="go('${b.link}')">
       <div class="s-left">
         <div class="s-tag">${b.tag}</div>
@@ -591,7 +600,7 @@ async function viewHome(v){
       </div>
       <div class="bn-list">
         ${BANNERS.map((b,i)=>`<button aria-label="${esc(b.list.join(' '))}" onmouseenter="bnGo(${i})" onclick="go('${b.link}')">
-          <span>${b.list[0]}<br>${b.list[1]||''}</span><span class="th">${b.thumb}</span></button>`).join('')}
+          <span>${b.list[0]}<br>${b.list[1]||''}</span><span class="th">${/\.(jpg|png|webp)$/.test(b.thumb)?`<img src="${b.thumb}" alt="">`:b.thumb}</span></button>`).join('')}
       </div>
     </div>
     <div class="sec-h"><h2>오늘의 추천</h2><span>${all.length}개 상품</span></div>
