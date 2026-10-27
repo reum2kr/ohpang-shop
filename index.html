@@ -113,6 +113,7 @@
   .hero-tile .hdisc{position:absolute;top:8px;left:8px;background:#ff4e50;color:#fff;font-size:11px;font-weight:800;padding:1px 6px;border-radius:5px}
   .hero-tile .hbolt{position:absolute;top:8px;right:8px;font-size:12px}
   .hero-tile .hemoji{font-size:54px;line-height:1.15;margin-top:6px}
+  .hero-tile .himg{width:84px;height:84px;object-fit:contain;margin:6px auto 0}
   .hero-tile .hnm{font-size:11.5px;font-weight:600;margin:8px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1a1f27}
   .hero-tile .hpr{font-size:13.5px;font-weight:800;color:#ff4e50}
   .slide .leaf{position:absolute;z-index:1;opacity:.9;filter:drop-shadow(0 2px 2px rgba(0,0,0,.08));pointer-events:none}
@@ -136,8 +137,9 @@
   @media(max-width:520px){.topbar{flex-wrap:wrap;height:auto;padding:10px 0}.search{order:3;max-width:100%;flex-basis:100%}}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .12s,box-shadow .12s;cursor:pointer}
   .card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(20,30,45,.12);border-color:#dfe3ea}
-  .card .thumb{position:relative;height:150px;display:grid;place-items:center;font-size:56px;background:var(--bg);overflow:hidden}
-  .card .thumb img{height:100%;width:100%;object-fit:cover}
+  .card .thumb{position:relative;aspect-ratio:1/1;display:grid;place-items:center;font-size:56px;background:#fff;overflow:hidden;border-bottom:1px solid var(--line)}
+  .card .thumb img{height:100%;width:100%;object-fit:contain;transition:transform .25s}
+  .card:hover .thumb img{transform:scale(1.04)}
   .card .dbadge{position:absolute;left:8px;top:8px;background:var(--delivery);color:#fff;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:5px}
   .card .soldout{position:absolute;inset:0;background:rgba(20,25,33,.55);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}
   .card .body{padding:11px 12px 14px}
@@ -186,8 +188,12 @@
 
   /* cart */
   .cart-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
-  .cart-item .ic{width:58px;height:58px;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-size:30px;overflow:hidden;flex-shrink:0}
-  .cart-item .ic img{width:100%;height:100%;object-fit:cover}
+  .cart-item .ic{width:64px;height:64px;border-radius:10px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:30px;overflow:hidden;flex-shrink:0}
+  .cart-item .ic img{width:100%;height:100%;object-fit:contain}
+  .pd-img{height:300px;background:#fff;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:130px;overflow:hidden}
+  .pd-img img{width:100%;height:100%;object-fit:contain}
+  .mini{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:7px;background:#fff;border:1px solid var(--line);vertical-align:middle;margin-right:10px;overflow:hidden;font-size:22px}
+  .mini img{width:100%;height:100%;object-fit:contain}
   .cart-item .meta{flex:1;min-width:0}
   .cart-item .meta .n{font-weight:700;font-size:14px}
   .cart-item .meta .p{color:var(--muted);font-size:12.5px}
@@ -281,26 +287,26 @@ async function http(method, path, body){
    백엔드가 준비되면 이 블록은 사용되지 않습니다(USE_MOCK=false). */
 const CATS = ['전체','가전디지털','패션의류','뷰티','식품','홈/리빙','스포츠/레저','유아동','도서/음반'];
 const MOCK_PRODUCTS = [
-  {id:101,name:'Oh!Pang 무선 이어버드 Pro',category:'가전디지털',price:89000,stock:120,icon:'🎧',description:'하루 종일 편안한 노이즈 캔슬링 이어폰'},
-  {id:102,name:'소프트터치 기계식 키보드',category:'가전디지털',price:119000,stock:64,icon:'⌨️',description:'적축, 무선/유선 겸용 텐키리스'},
-  {id:103,name:'데일리 텀블러 500ml',category:'홈/리빙',price:22000,stock:300,icon:'🥤',description:'보온보냉 12시간, 식기세척기 가능'},
-  {id:104,name:'포근 극세사 담요',category:'홈/리빙',price:34000,stock:150,icon:'🧣',description:'겨울 필수템, 세탁 후에도 보송'},
-  {id:105,name:'미니 가습기 USB',category:'가전디지털',price:27000,stock:210,icon:'💧',description:'사무실 책상용 저소음 가습기'},
-  {id:106,name:'러닝 스포츠 양말 5팩',category:'패션의류',price:15000,stock:500,icon:'🧦',description:'통기성 메쉬, 발목 지지 밴드'},
-  {id:107,name:'아로마 캔들 세트',category:'홈/리빙',price:31000,stock:90,icon:'🕯️',description:'라벤더·시트러스·우디 3종'},
-  {id:108,name:'휴대용 보조배터리 20000mAh',category:'가전디지털',price:39000,stock:175,icon:'🔋',description:'고속충전 PD 25W, 노트북 충전 가능'},
-  {id:109,name:'촉촉 수분 크림 50ml',category:'뷰티',price:24000,stock:260,icon:'🧴',description:'히알루론산, 민감성 피부용'},
-  {id:110,name:'데일리 립밤 3종 세트',category:'뷰티',price:12000,stock:340,icon:'💄',description:'보습 가득, 무향·장미·민트'},
-  {id:111,name:'유기농 아라비카 원두 1kg',category:'식품',price:28000,stock:180,icon:'☕',description:'미디엄 로스팅, 홀빈/분쇄 선택'},
-  {id:112,name:'하루견과 선물세트 30봉',category:'식품',price:32000,stock:220,icon:'🥜',description:'아몬드·호두·크랜베리 혼합'},
-  {id:113,name:'베이직 오버핏 후드티',category:'패션의류',price:36000,stock:400,icon:'👕',description:'기모 안감, 유니섹스 5색'},
-  {id:114,name:'에어로 경량 러닝화',category:'스포츠/레저',price:79000,stock:130,icon:'👟',description:'초경량 쿠셔닝, 230~290mm'},
-  {id:115,name:'논슬립 TPE 요가매트',category:'스포츠/레저',price:29000,stock:170,icon:'🧘',description:'6mm 쿠션, 세척 간편'},
-  {id:116,name:'올해의 베스트셀러 장편소설',category:'도서/음반',price:15800,stock:500,icon:'📚',description:'출간 즉시 베스트셀러 1위'},
-  {id:117,name:'순한 아기 물티슈 10팩',category:'유아동',price:18900,stock:600,icon:'🧻',description:'무향·무알코올, 엠보싱 70매'},
-  {id:118,name:'창의력 블록 장난감 세트',category:'유아동',price:45000,stock:0,icon:'🧱',description:'200피스, 3세 이상 (품절 예시)'},
-  {id:119,name:'스마트 체중계 체성분 측정',category:'가전디지털',price:33000,stock:150,icon:'⚖️',description:'앱 연동, BMI·체지방 측정'},
-  {id:120,name:'인덕션 스테인리스 프라이팬',category:'홈/리빙',price:42000,stock:160,icon:'🍳',description:'3중 바닥, 28cm 논스틱'},
+  {id:101,imageUrl:'images/p101.jpg',name:'Oh!Pang 무선 이어버드 Pro',category:'가전디지털',price:89000,stock:120,icon:'🎧',description:'하루 종일 편안한 노이즈 캔슬링 이어폰'},
+  {id:102,imageUrl:'images/p102.jpg',name:'소프트터치 기계식 키보드',category:'가전디지털',price:119000,stock:64,icon:'⌨️',description:'적축, 무선/유선 겸용 텐키리스'},
+  {id:103,imageUrl:'images/p103.jpg',name:'데일리 텀블러 500ml',category:'홈/리빙',price:22000,stock:300,icon:'🥤',description:'보온보냉 12시간, 식기세척기 가능'},
+  {id:104,imageUrl:'images/p104.jpg',name:'포근 극세사 담요',category:'홈/리빙',price:34000,stock:150,icon:'🧣',description:'겨울 필수템, 세탁 후에도 보송'},
+  {id:105,imageUrl:'images/p105.jpg',name:'미니 가습기 USB',category:'가전디지털',price:27000,stock:210,icon:'💧',description:'사무실 책상용 저소음 가습기'},
+  {id:106,imageUrl:'images/p106.jpg',name:'러닝 스포츠 양말 5팩',category:'패션의류',price:15000,stock:500,icon:'🧦',description:'통기성 메쉬, 발목 지지 밴드'},
+  {id:107,imageUrl:'images/p107.jpg',name:'아로마 캔들 세트',category:'홈/리빙',price:31000,stock:90,icon:'🕯️',description:'라벤더·시트러스·우디 3종'},
+  {id:108,imageUrl:'images/p108.jpg',name:'휴대용 보조배터리 20000mAh',category:'가전디지털',price:39000,stock:175,icon:'🔋',description:'고속충전 PD 25W, 노트북 충전 가능'},
+  {id:109,imageUrl:'images/p109.jpg',name:'촉촉 수분 크림 50ml',category:'뷰티',price:24000,stock:260,icon:'🧴',description:'히알루론산, 민감성 피부용'},
+  {id:110,imageUrl:'images/p110.jpg',name:'데일리 립밤 3종 세트',category:'뷰티',price:12000,stock:340,icon:'💄',description:'보습 가득, 무향·장미·민트'},
+  {id:111,imageUrl:'images/p111.jpg',name:'유기농 아라비카 원두 1kg',category:'식품',price:28000,stock:180,icon:'☕',description:'미디엄 로스팅, 홀빈/분쇄 선택'},
+  {id:112,imageUrl:'images/p112.jpg',name:'하루견과 선물세트 30봉',category:'식품',price:32000,stock:220,icon:'🥜',description:'아몬드·호두·크랜베리 혼합'},
+  {id:113,imageUrl:'images/p113.jpg',name:'베이직 오버핏 후드티',category:'패션의류',price:36000,stock:400,icon:'👕',description:'기모 안감, 유니섹스 5색'},
+  {id:114,imageUrl:'images/p114.jpg',name:'에어로 경량 러닝화',category:'스포츠/레저',price:79000,stock:130,icon:'👟',description:'초경량 쿠셔닝, 230~290mm'},
+  {id:115,imageUrl:'images/p115.jpg',name:'논슬립 TPE 요가매트',category:'스포츠/레저',price:29000,stock:170,icon:'🧘',description:'6mm 쿠션, 세척 간편'},
+  {id:116,imageUrl:'images/p116.jpg',name:'올해의 베스트셀러 장편소설',category:'도서/음반',price:15800,stock:500,icon:'📚',description:'출간 즉시 베스트셀러 1위'},
+  {id:117,imageUrl:'images/p117.jpg',name:'순한 아기 물티슈 10팩',category:'유아동',price:18900,stock:600,icon:'🧻',description:'무향·무알코올, 엠보싱 70매'},
+  {id:118,imageUrl:'images/p118.jpg',name:'창의력 블록 장난감 세트',category:'유아동',price:45000,stock:0,icon:'🧱',description:'200피스, 3세 이상 (품절 예시)'},
+  {id:119,imageUrl:'images/p119.jpg',name:'스마트 체중계 체성분 측정',category:'가전디지털',price:33000,stock:150,icon:'⚖️',description:'앱 연동, BMI·체지방 측정'},
+  {id:120,imageUrl:'images/p120.jpg',name:'인덕션 스테인리스 프라이팬',category:'홈/리빙',price:42000,stock:160,icon:'🍳',description:'3중 바닥, 28cm 논스틱'},
 ];
 const MOCK = {
   users(){ return LS.get('ohpang_users', [
@@ -368,7 +374,7 @@ const api = {
       if(!p) throw new Error('존재하지 않는 상품이 포함되어 있습니다.');
       if(p.stock < it.quantity) throw new Error(`"${p.name}" 재고가 부족합니다. (재고 ${p.stock}개)`);
       total += p.price * it.quantity;
-      detail.push({productId:p.id, name:p.name, price:p.price, quantity:it.quantity, icon:p.icon});
+      detail.push({productId:p.id, name:p.name, price:p.price, quantity:it.quantity, icon:p.icon, imageUrl:p.imageUrl});
     }
     const order = {
       orderId: MOCK.nextOrderId(), userId: s.user.id, items: detail,
@@ -576,7 +582,7 @@ async function viewHome(v){
   const tiles=feat.map(p=>{const m=meta(p);
     return `<div class="hero-tile" onclick="event.stopPropagation();go('/product/${p.id}')">
       ${m.pct>0?`<span class="hdisc">${m.pct}%</span>`:''}${m.rocket?'<span class="hbolt">⚡</span>':''}
-      <div class="hemoji">${p.icon}</div><div class="hnm">${esc(p.name)}</div><div class="hpr">${won(p.price)}</div></div>`;}).join('');
+      ${p.imageUrl?`<img class="himg" src="${esc(p.imageUrl)}" alt="${esc(p.name)}">`:`<div class="hemoji">${p.icon}</div>`}<div class="hnm">${esc(p.name)}</div><div class="hpr">${won(p.price)}</div></div>`;}).join('');
   v.innerHTML=`
     <div class="banner-wrap" onmouseenter="bnPause(true)" onmouseleave="bnPause(false)">
       <div class="banner" id="banner">
@@ -630,7 +636,7 @@ async function viewProduct(v, id){
     <div class="crumbs"><a onclick="go('/')">홈</a> › <a onclick="selectCat('${esc(p.category)}')">${esc(p.category)}</a> › ${esc(p.name)}</div>
     <div class="panel"><div class="row">
       <div class="col" style="flex:0 0 300px">
-        <div style="height:280px;background:var(--bg);border-radius:12px;display:grid;place-items:center;font-size:130px;overflow:hidden">${productImg(p)}</div>
+        <div class="pd-img">${productImg(p)}</div>
       </div>
       <div class="col">
         <div style="color:var(--brand-ink);font-weight:700;font-size:12px">${esc(p.category)}</div>
@@ -866,7 +872,7 @@ async function viewOrderDetail(v, id){
       <tr><th>상태</th><td>${statusBadge(o.status)}</td></tr>
     </table>
     <h3 style="font-size:15px;margin:18px 0 6px">주문 상품</h3>
-    ${o.items.map(it=>`<div class="sumline"><span>${it.icon||''} ${esc(it.name)} × ${it.quantity}</span><span>${won(it.price*it.quantity)}</span></div>`).join('')}
+    ${o.items.map(it=>`<div class="sumline"><span style="display:flex;align-items:center"><span class="mini">${productImg(it)}</span>${esc(it.name)} × ${it.quantity}</span><span>${won(it.price*it.quantity)}</span></div>`).join('')}
     <div class="sumline total"><span>결제금액</span><span>${won(o.totalAmount)}</span></div>
   </div>
   <div class="panel"><h2 style="font-size:17px">배송지</h2>
