@@ -472,7 +472,7 @@ function meta(p){
   return {pct,oprice,rating,reviews,rocket};
 }
 function productImg(p){
-  return p.imageUrl ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}">` : (p.icon||'📦');
+  return p.imageUrl ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy" decoding="async">` : (p.icon||'📦');
 }
 
 /* ===================== 라우팅 ===================== */
@@ -543,11 +543,11 @@ const BANNERS = [
   { key:'kids', list:['베이비&키즈','페스타'], thumb:'images/p118.jpg', link:'/products?category=유아동',
     bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#e7f8ef 0%,#f3fadf 50%,#fff2c4 100%)',
     accent:'#f08c00', tag:'🧸 베이비&키즈 페스타', h1:'우리 아이 웃음 가득', h2:'키즈 페스타 최대 30%', sub:'장난감·육아용품을 한 번에',
-    art:[ ['✨',36,8,30,0], {img:'c118',w:250,x:20,y:40,r:-3}, {pod:'p117',d:124,x:288,y:150}, ['🎈',60,335,18,10] ] },
+    art:[ ['✨',36,8,30,0], {img:'c118',w:250,x:20,y:40,r:-3}, {img:'c117',w:140,x:282,y:150,r:4}, ['🎈',60,335,18,10] ] },
   { key:'beauty', list:['뷰티','베스트 리뷰템'], thumb:'images/p110.jpg', link:'/products?category=뷰티',
     bg:'radial-gradient(420px 240px at 72% 50%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#fdecf2 0%,#f8dcea 55%,#f0d0e4 100%)',
     accent:'#d6336c', tag:'💄 Oh!Pang 뷰티관', h1:'피부가 먼저 아는', h2:'뷰티 베스트 리뷰템', sub:'리뷰 평점 4.5 이상 인기템 모음',
-    art:[ ['🌸',50,205,26,0], {img:'c110',w:170,x:30,y:72,r:-6}, {pod:'p109',d:172,x:215,y:96}, ['🌸',34,388,236,20] ] },
+    art:[ ['🌸',50,205,26,0], {img:'c110',w:170,x:30,y:72,r:-6}, {img:'c109',w:178,x:212,y:104,r:0}, ['🌸',34,388,236,20] ] },
   { key:'autumn', list:['환절기','생필품 특가'], thumb:'images/p104.jpg', link:'/products?category=홈/리빙' },
   { key:'buds', list:['이어버드 Pro','소음은 끄고'], thumb:'images/p101.jpg', link:'/product/101',
     bg:'radial-gradient(380px 260px at 70% 55%, rgba(255,255,255,.65), transparent 70%),linear-gradient(180deg,#e3edf9 0%,#d2e1f3 100%)',
