@@ -319,14 +319,24 @@
    Oh!Pang — 쇼핑몰 프론트엔드 (OWASP 취약점 분석 프로젝트)
    · 프론트엔드 역할: 일반 쇼핑몰 UI/각 페이지/REST API 연동/배포
    · 취약점 구현·검증은 백엔드(로컬 실습 환경)에서 담당 — 프론트엔드에는 공격 기능 없음
-   · 백엔드 API가 준비되기 전에도 동작하도록 목(mock) 데이터로 구동.
-     백엔드 연동 시 아래 CONFIG에서 USE_MOCK=false 로 바꾸고 API_BASE만 맞추면 됨.
+   · 실제 백엔드(Node.js/Express, REST API)와 연동. 백엔드가 없는 곳(GitHub Pages 등)에서는
+     목(mock) 데이터로 동작해 화면을 그대로 체험할 수 있음.
    ========================================================================= */
 
-/* ===================== CONFIG (백엔드 연동 지점) ===================== */
+/* ===================== CONFIG (백엔드 연동 지점) =====================
+   API 모드는 실행 위치에 따라 자동 선택:
+     · http://localhost 또는 http://127.0.0.1 로 연 경우 → 실제 백엔드 API
+     · 그 외(GitHub Pages, 파일 더블클릭 등)          → 목(mock) 데이터
+   주소 뒤에 ?api=real 또는 ?api=mock 을 붙이면 강제로 선택할 수 있음.
+     예) http://127.0.0.1:5500/index.html?api=mock   https://reum2kr.github.io/ohpang-shop/?api=real */
+const API_MODE = (() => {
+  const q = new URLSearchParams(location.search).get('api');
+  if (q === 'real' || q === 'mock') return q;
+  return ['localhost', '127.0.0.1'].includes(location.hostname) ? 'real' : 'mock';
+})();
 const CONFIG = {
-  API_BASE: 'http://localhost:3000/api/v1',   // 백엔드 기본 주소 (명세서 기준)
-  USE_MOCK: true,                              // true: 목 데이터로 동작 / false: 실제 API 호출
+  API_BASE: 'http://127.0.0.1:3000/api/v1',   // 백엔드 기본 주소 (다른 PC면 여기만 바꾸면 됨)
+  USE_MOCK: API_MODE !== 'real',
 };
 
 const won = n => '₩' + Number(n||0).toLocaleString('ko-KR');
@@ -338,17 +348,26 @@ const LS = {
 };
 
 /* ===================== REST 호출 헬퍼 (실제 API 모드) ===================== */
-async function http(method, path, body){
-  const res = await fetch(CONFIG.API_BASE + path, {
-    method,
-    headers: { 'Content-Type':'application/json' },
-    credentials: 'include',
-    body: body ? JSON.stringify(body) : undefined,
-  });
+// 응답 전체(JSON)를 반환. 서버 연결 실패·오류 응답은 Error로 던짐 (status 포함)
+async function httpJson(method, path, body){
+  let res;
+  try{
+    res = await fetch(CONFIG.API_BASE + path, {
+      method,
+      credentials: 'include',                       // 서버 세션 쿠키 사용
+      headers: body ? { 'Content-Type':'application/json' } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  }catch(e){
+    const err = new Error(`백엔드 서버에 연결할 수 없습니다 (${CONFIG.API_BASE}). 서버가 실행 중인지 확인해 주세요. 목 데이터로 보려면 주소 뒤에 ?api=mock 을 붙이세요.`);
+    err.network = true; throw err;
+  }
   let json; try{ json = await res.json(); }catch(e){ json = {success:false, message:'서버 응답을 해석할 수 없습니다.'}; }
-  if(!res.ok || json.success === false) throw new Error(json.message || ('요청 실패 ('+res.status+')'));
-  return json.data;
+  if(!res.ok || json.success === false){ const err = new Error(json.message || ('요청 실패 ('+res.status+')')); err.status = res.status; throw err; }
+  return json;
 }
+// 응답의 data 필드만 반환
+async function http(method, path, body){ return (await httpJson(method, path, body)).data; }
 
 /* ===================== 목(MOCK) 데이터 계층 =====================
    백엔드가 준비되면 이 블록은 사용되지 않습니다(USE_MOCK=false). */
@@ -387,11 +406,25 @@ const MOCK = {
 };
 
 /* ===================== API (프론트 공용 인터페이스) =====================
-   각 메서드는 성공 시 data를 반환, 실패 시 Error를 throw.
-   USE_MOCK=false면 명세서의 REST 엔드포인트를 그대로 호출. */
+   각 메서드는 성공 시 데이터를 반환, 실패 시 Error를 throw.
+   실제 API 모드의 요청·응답 형식은 백엔드 연동본(ohpang-frontend-integration)에서 확인된 것을 따름:
+     · 인증(register/login/me): 응답의 user 필드 / 로그아웃: success만 확인
+     · 상품·주문 조회: data 필드
+     · 결제수단: CARD / BANK_TRANSFER / KAKAO_PAY
+
+   상품 번호: DB 상품 id(6~25) ↔ 화면 상품 번호(101~120).
+   이미지(images/p101~p120.jpg)와 배너·광고 링크가 화면 번호 기준이라, 변환은 이 계층에서만 함. */
+const DB_ID_OFFSET = 95;
+const toDbId = id => { const n = Number(id); return n >= 101 ? n - DB_ID_OFFSET : n; };
+function mapDbProduct(p){
+  const dbId = Number(p.id), id = dbId + DB_ID_OFFSET;
+  return { ...p, dbId, id, icon: p.emoji || p.icon || '📦', imageUrl: p.imageUrl || `images/p${id}.jpg` };
+}
+const pick = (j, ...keys) => { for(const k of keys){ if(j && j[k] !== undefined) return j[k]; } return j; };
+
 const api = {
   async register({email,password,name}){
-    if(!CONFIG.USE_MOCK) return http('POST','/auth/register',{email,password,name});
+    if(!CONFIG.USE_MOCK) return pick(await httpJson('POST','/auth/register',{email,password,name}), 'user','data');
     const users = MOCK.users();
     if(!email||!password||!name) throw new Error('이메일·비밀번호·이름을 모두 입력해 주세요.');
     if(users.some(u=>u.email===email)) throw new Error('이미 가입된 이메일입니다.');
@@ -400,25 +433,29 @@ const api = {
     return {id:user.id, email, name};
   },
   async login({email,password}){
-    if(!CONFIG.USE_MOCK) return http('POST','/auth/login',{email,password});
+    if(!CONFIG.USE_MOCK){
+      const j = await httpJson('POST','/auth/login',{email,password});
+      return {token:'session', user: pick(j,'user','data')};          // 인증은 서버 세션 쿠키
+    }
     const user = MOCK.users().find(u=>u.email===email && u.password===password);
     if(!user) throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.');
     const token = 'mock-'+Math.random().toString(36).slice(2);
     return {token, user:{id:user.id, email:user.email, name:user.name}};
   },
   async logout(){
-    if(!CONFIG.USE_MOCK) { try{ await http('POST','/auth/logout'); }catch(e){} return {ok:true}; }
+    if(!CONFIG.USE_MOCK){ await httpJson('POST','/auth/logout'); return {ok:true}; }
     return {ok:true};
   },
   async me(){
-    if(!CONFIG.USE_MOCK) return http('GET','/auth/me');
+    if(!CONFIG.USE_MOCK) return pick(await httpJson('GET','/auth/me'), 'user','data');
     const s = session.get(); if(!s) throw new Error('로그인이 필요합니다.');
     return s.user;
   },
   async products({search='', category=''}={}){
     if(!CONFIG.USE_MOCK){
       const qs = new URLSearchParams(); if(search)qs.set('search',search); if(category&&category!=='전체')qs.set('category',category);
-      return http('GET','/products'+(qs.toString()?('?'+qs):''));
+      const list = await http('GET','/products'+(qs.toString()?('?'+qs):''));
+      return (list||[]).map(mapDbProduct);
     }
     let list = MOCK_PRODUCTS.slice();
     if(category && category!=='전체') list = list.filter(p=>p.category===category);
@@ -426,13 +463,16 @@ const api = {
     return list;
   },
   async product(id){
-    if(!CONFIG.USE_MOCK) return http('GET','/products/'+id);
+    if(!CONFIG.USE_MOCK) return mapDbProduct(await http('GET','/products/'+encodeURIComponent(toDbId(id))));
     const p = MOCK_PRODUCTS.find(x=>x.id===Number(id));
     if(!p) throw new Error('상품을 찾을 수 없습니다.');
     return p;
   },
   async createOrder({items, shippingAddress}){
-    if(!CONFIG.USE_MOCK) return http('POST','/orders',{items, shippingAddress});
+    if(!CONFIG.USE_MOCK){
+      const body = { items: items.map(i=>({productId: toDbId(i.productId), quantity: i.quantity})), shippingAddress };
+      return pick(await httpJson('POST','/orders',body), 'data');     // { orderId, totalAmount, status }
+    }
     const s = session.get(); if(!s) throw new Error('로그인이 필요합니다.');
     if(!items||!items.length) throw new Error('주문할 상품이 없습니다.');
     // 서버가 상품/가격을 다시 검증 (프론트가 보낸 가격은 신뢰하지 않음)
@@ -458,20 +498,20 @@ const api = {
     return MOCK.orders().filter(o=>o.userId===s.user.id).sort((a,b)=>b.orderId-a.orderId);
   },
   async order(id){
-    if(!CONFIG.USE_MOCK) return http('GET','/orders/'+id);
+    if(!CONFIG.USE_MOCK) return http('GET','/orders/'+encodeURIComponent(id));
     const o = MOCK.orders().find(x=>x.orderId===Number(id));
     if(!o) throw new Error('주문을 찾을 수 없습니다.');
     return o;
   },
   async updateAddress(id, shippingAddress){
-    if(!CONFIG.USE_MOCK) return http('PATCH','/orders/'+id+'/address',{shippingAddress});
+    if(!CONFIG.USE_MOCK) return pick(await httpJson('PATCH','/orders/'+encodeURIComponent(id)+'/address',{shippingAddress}), 'data');
     const orders = MOCK.orders(); const o = orders.find(x=>x.orderId===Number(id));
     if(!o) throw new Error('주문을 찾을 수 없습니다.');
     o.shippingAddress = shippingAddress; MOCK.saveOrders(orders);
     return {orderId:o.orderId, shippingAddress:o.shippingAddress};
   },
   async pay(id, {amount, paymentMethod}){
-    if(!CONFIG.USE_MOCK) return http('POST','/orders/'+id+'/pay',{amount, paymentMethod});
+    if(!CONFIG.USE_MOCK) return pick(await httpJson('POST','/orders/'+encodeURIComponent(id)+'/pay',{amount:Number(amount), paymentMethod}), 'data');
     const orders = MOCK.orders(); const o = orders.find(x=>x.orderId===Number(id));
     if(!o) throw new Error('주문을 찾을 수 없습니다.');
     if(o.status==='PAID') throw new Error('이미 결제가 완료된 주문입니다.');
@@ -481,7 +521,7 @@ const api = {
     return {orderId:o.orderId, amount:o.totalAmount, status:'PAID'};
   },
   async payment(id){
-    if(!CONFIG.USE_MOCK) return http('GET','/orders/'+id+'/payment');
+    if(!CONFIG.USE_MOCK) return http('GET','/orders/'+encodeURIComponent(id)+'/payment');
     const o = MOCK.orders().find(x=>x.orderId===Number(id));
     if(!o) throw new Error('결제 내역을 찾을 수 없습니다.');
     return {orderId:o.orderId, amount:o.totalAmount, status:o.status, paymentMethod:o.paymentMethod||null};
@@ -494,18 +534,23 @@ const session = {
   set(s){ LS.set('ohpang_session', s); },
   clear(){ LS.del('ohpang_session'); },
 };
+const CART_KEY = CONFIG.USE_MOCK ? 'ohpang_cart' : 'ohpang_cart_real_v1';   // 모드별로 장바구니 분리
 const cart = {
-  get(){ return LS.get('ohpang_cart', []); },
-  set(c){ LS.set('ohpang_cart', c); syncChrome(); },
-  add(productId, quantity=1){ const c=this.get(); const e=c.find(i=>i.productId===productId); if(e)e.quantity+=quantity; else c.push({productId,quantity}); this.set(c); },
-  setQty(productId, q){ let c=this.get(); const e=c.find(i=>i.productId===productId); if(e){ e.quantity=Math.max(1,q); } this.set(c); },
-  remove(productId){ this.set(this.get().filter(i=>i.productId!==productId)); },
+  get(){ return LS.get(CART_KEY, []); },
+  set(c){ LS.set(CART_KEY, c); syncChrome(); },
+  add(productId, quantity=1){ const id=Number(productId); const c=this.get(); const e=c.find(i=>Number(i.productId)===id); if(e)e.quantity+=quantity; else c.push({productId:id,quantity}); this.set(c); },
+  setQty(productId, q){ const c=this.get(); const e=c.find(i=>Number(i.productId)===Number(productId)); if(e){ e.quantity=Math.max(1,q); } this.set(c); },
+  remove(productId){ this.set(this.get().filter(i=>Number(i.productId)!==Number(productId))); },
   clear(){ this.set([]); },
   count(){ return this.get().reduce((s,i)=>s+i.quantity,0); },
 };
 
 /* 카드 표시용 파생값 (할인율·별점·배송 — 화면 연출용) */
 function meta(p){
+  if(!CONFIG.USE_MOCK && (p.discountPercent!==undefined || p.rating!==undefined)){
+    return { pct:Number(p.discountPercent||0), oprice:Number(p.originalPrice||0), rating:Number(p.rating||0).toFixed(1),
+             reviews:Number(p.reviewCount||0), rocket:Boolean(p.isFastDelivery) };
+  }
   const dt=[18,25,0,15,30,12,22,10,20,33,15,27,19,24,0,14,28,0,31,16];
   const pct=dt[(p.id-101+dt.length)%dt.length]||0;
   const oprice=pct>0?Math.round(p.price/(1-pct/100)/100)*100:0;
@@ -567,7 +612,7 @@ function syncChrome(){
   }
   renderCatRail();
   const note=document.getElementById('apiModeNote');
-  if(note) note.textContent = CONFIG.USE_MOCK ? '※ 현재 목(mock) 데이터로 동작 중입니다. 백엔드 연동 시 CONFIG.USE_MOCK=false' : ('API: '+CONFIG.API_BASE);
+  if(note) note.textContent = CONFIG.USE_MOCK ? '※ 목(mock) 데이터로 동작 중 · 실제 백엔드로 보려면 주소 뒤에 ?api=real' : ('실제 백엔드 연동 중 · API: '+CONFIG.API_BASE);
 }
 function renderCatRail(){
   const rail=document.getElementById('catRail'); if(!rail) return;
@@ -822,14 +867,14 @@ function viewLogin(v){
   if(session.get()){ go('/mypage'); return; }
   v.innerHTML=`<div class="panel" style="max-width:420px;margin:30px auto">
     <h2>로그인</h2><div class="sub">Oh!Pang 계정으로 로그인하세요.</div>
-    <label class="fld">이메일</label><input class="inp" id="lgEmail" type="email" placeholder="you@example.com" value="demo@ohpang.shop">
-    <label class="fld">비밀번호</label><input class="inp" id="lgPw" type="password" placeholder="비밀번호" value="demo1234">
+    <label class="fld">이메일</label><input class="inp" id="lgEmail" type="email" placeholder="you@example.com" value="${CONFIG.USE_MOCK?'demo@ohpang.shop':''}">
+    <label class="fld">비밀번호</label><input class="inp" id="lgPw" type="password" placeholder="비밀번호" value="${CONFIG.USE_MOCK?'demo1234':''}">
     <div id="lgMsg"></div>
     <button class="btn primary block" style="margin-top:16px" onclick="doLogin()">로그인</button>
     <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--muted)">
       계정이 없으신가요? <a onclick="go('/register')" style="color:var(--brand-ink);font-weight:700;cursor:pointer">회원가입</a>
     </div>
-    <div class="notice info" style="margin-top:14px;font-size:12px">체험용 계정: demo@ohpang.shop / demo1234</div>
+    ${CONFIG.USE_MOCK?'<div class="notice info" style="margin-top:14px;font-size:12px">체험용 계정: demo@ohpang.shop / demo1234</div>':''}
   </div>`;
 }
 async function doLogin(){
@@ -842,7 +887,11 @@ async function doLogin(){
     toast('로그인되었습니다 👋'); go('/mypage');
   }catch(e){ msg.innerHTML=`<div class="notice err">${esc(e.message)}</div>`; }
 }
-async function doLogout(){ try{ await api.logout(); }catch(e){} session.clear(); toast('로그아웃되었습니다'); go('/'); }
+async function doLogout(){
+  let msg='로그아웃되었습니다';
+  try{ await api.logout(); }catch(e){ if(e.status!==401) msg='서버 로그아웃에 실패해 이 기기에서만 로그아웃했습니다'; }
+  session.clear(); toast(msg); go('/');
+}
 
 /* ===================== 뷰: 회원가입 ===================== */
 function viewRegister(v){
@@ -920,8 +969,9 @@ async function viewPay(v, id){
     <div class="sumline total"><span>결제 예정 금액</span><span>${won(o.totalAmount)}</span></div>
     <label class="fld">결제 수단</label>
     <select class="inp" id="payMethod">
-      <option value="MOCK_CARD">모의 카드결제 (MOCK_CARD)</option>
-      <option value="MOCK_TRANSFER">모의 계좌이체 (MOCK_TRANSFER)</option>
+      <option value="CARD">모의 카드결제</option>
+      <option value="BANK_TRANSFER">모의 계좌이체</option>
+      <option value="KAKAO_PAY">모의 카카오페이</option>
     </select>
     <div class="notice info" style="margin-top:12px">※ 실제 결제는 진행되지 않는 모의 결제입니다.</div>
     <div id="payMsg"></div>
@@ -1031,7 +1081,19 @@ function toast(msg){
 }
 
 /* ===================== 시작 ===================== */
-render();
+async function startApp(){
+  if(!CONFIG.USE_MOCK && session.get()){
+    try{
+      const user = await api.me();
+      if(user) session.set({token:'session', user}); else session.clear();
+    }catch(e){
+      if(e.status===401) session.clear();                 // 서버 세션 만료 → 로그아웃 처리
+      else console.warn('로그인 상태 확인 실패:', e.message);
+    }
+  }
+  await render();
+}
+startApp();
 </script>
 </body>
 </html>

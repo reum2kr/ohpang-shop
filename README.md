@@ -7,7 +7,8 @@ OWASP Top 10:2025 웹 취약점 분석 프로젝트의 **프론트엔드**입니
 ## 구성
 
 - `index.html` (HTML/CSS/JS 인라인, 로고 이미지 내장) + `images/` (상품 사진 p101~p120.jpg) → GitHub Pages에 그대로 배포
-- 백엔드 API가 준비되기 전에도 동작하도록 **목(mock) 데이터**로 구동됩니다. 브라우저 `localStorage`에 회원/주문/장바구니가 저장돼 흐름을 끝까지 체험할 수 있습니다.
+- 백엔드: [Soyoon0608/ohpang-backend](https://github.com/Soyoon0608/ohpang-backend) (Node.js / Express, Supabase) — 로컬 `127.0.0.1:3000`
+- 백엔드가 없는 곳(GitHub Pages 등)에서는 **목(mock) 데이터**로 동작합니다. 브라우저 `localStorage`에 회원/주문/장바구니가 저장돼 흐름을 끝까지 체험할 수 있습니다.
 
 ## 페이지 / 기능
 
@@ -25,27 +26,43 @@ OWASP Top 10:2025 웹 취약점 분석 프로젝트의 **프론트엔드**입니
 | 마이페이지 | 회원 정보, 주문 내역 |
 | 주문 상세 | 주문번호·상품·결제금액·배송지, 배송지 변경 |
 
-체험용 계정: **demo@ohpang.shop / demo1234** (또는 직접 회원가입)
+목 모드 체험용 계정: **demo@ohpang.shop / demo1234** (또는 직접 회원가입). 실제 백엔드 모드에서는 회원가입 후 로그인하세요.
 
 ## 백엔드 연동
 
-`index.html` 상단 `CONFIG`에서 전환합니다.
+### 모드 자동 선택
 
-```js
-const CONFIG = {
-  API_BASE: 'http://localhost:3000/api/v1', // 백엔드 기본 주소
-  USE_MOCK: true,  // true: 목 데이터 / false: 실제 API 호출
-};
-```
+| 여는 방법 | 모드 |
+|---|---|
+| `http://localhost:…` 또는 `http://127.0.0.1:…` (예: VS Code Live Server) | **실제 백엔드 API** |
+| GitHub Pages, 파일 더블클릭 등 그 외 | **목(mock) 데이터** |
+| 주소 뒤에 `?api=real` / `?api=mock` | 해당 모드로 강제 |
 
-- `USE_MOCK = false`로 바꾸면 아래 REST 엔드포인트(명세 기준)를 그대로 호출합니다. 인증은 쿠키 세션(`credentials: 'include'`) 기준으로 작성돼 있어, 필드명·인증 방식이 확정되면 `api` 객체만 맞추면 됩니다.
+예) `http://127.0.0.1:5500/index.html?api=mock`, `https://reum2kr.github.io/ohpang-shop/?api=real`
+화면 맨 아래에 현재 모드가 표시됩니다.
+
+### 실제 백엔드로 실행하기
+
+1. 백엔드 저장소를 실행합니다 (`127.0.0.1:3000`).
+2. 이 저장소 폴더를 로컬 웹서버로 엽니다. 예: VS Code **Live Server** → `http://127.0.0.1:5500/index.html`
+3. 백엔드가 꺼져 있으면 화면에 "백엔드 서버에 연결할 수 없습니다" 안내가 뜹니다.
+
+- 다른 PC에서 백엔드를 띄웠다면 `index.html`의 `CONFIG.API_BASE` 한 줄만 그 주소로 바꾸면 됩니다.
+- 인증은 서버 세션 쿠키(`credentials: 'include'`)를 씁니다. 백엔드 CORS에서 프론트 주소(예: `http://127.0.0.1:5500`)와 credentials를 허용해야 합니다.
+
+### 연동 규칙 (백엔드 연동본 기준)
+
+- 응답: 인증(`register`·`login`·`me`)은 `user` 필드, 상품·주문 조회는 `data` 필드
+- 상품 번호: DB 상품 id **6~25** ↔ 화면 상품 번호 **101~120** (`DB_ID_OFFSET = 95`). 사진(`images/p101~p120.jpg`)과 배너·광고 링크는 화면 번호 기준이고, 변환은 `index.html`의 API 계층에서만 합니다. DB 상품 번호가 바뀌면 `DB_ID_OFFSET`만 고치면 됩니다.
+- 결제수단: `CARD` / `BANK_TRANSFER` / `KAKAO_PAY`
+- 장바구니는 모드별로 따로 저장됩니다 (`ohpang_cart` / `ohpang_cart_real_v1`).
 
 | HTTP | API | 기능 |
 |---|---|---|
 | POST | `/auth/register` | 회원가입 |
 | POST | `/auth/login` | 로그인 |
 | POST | `/auth/logout` | 로그아웃 |
-| GET | `/auth/me` | 로그인 상태 확인 |
+| GET | `/auth/me` | 로그인 상태 확인 (새로고침 시 세션 확인) |
 | GET | `/products?search=&category=` | 상품 목록·검색 |
 | GET | `/products/:id` | 상품 상세 |
 | POST | `/orders` | 주문 생성 (items: productId·quantity만 전송, 가격은 서버가 계산) |
@@ -54,8 +71,6 @@ const CONFIG = {
 | PATCH | `/orders/:id/address` | 배송지 변경 |
 | POST | `/orders/:id/pay` | 모의 결제 |
 | GET | `/orders/:id/payment` | 결제 결과 조회 |
-
-> 모든 응답은 `{ success, data }` 형태를 가정합니다. 세부 필드·상태 코드는 백엔드와 협의 후 확정하면 됩니다.
 
 ## GitHub Pages 배포
 
