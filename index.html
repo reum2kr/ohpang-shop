@@ -259,6 +259,23 @@
   .big-result{text-align:center;padding:28px 0}
   .big-result .ico{font-size:64px}
   .big-result h2{margin:10px 0 6px}
+  /* 비밀번호 보기 버튼 */
+  .pw-wrap{position:relative}
+  .pw-wrap .inp{padding-right:46px}
+  .pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;padding:0;border:none;border-radius:8px;
+    background:transparent;color:var(--muted);display:grid;place-items:center}
+  .pw-eye:hover{background:var(--line);color:var(--ink)}
+  .pw-eye svg{width:20px;height:20px}
+  /* 삭제 버튼·확인 창 */
+  .btn.danger{background:var(--surface);color:var(--danger);border:1px solid var(--danger)}
+  .btn.danger:hover{background:var(--danger-bg)}
+  .btn.danger-fill{background:var(--danger);color:#fff}
+  .modal-mask{position:fixed;inset:0;z-index:90;background:rgba(10,15,22,.45);display:grid;place-items:center;padding:16px;animation:mfade .15s ease}
+  .modal{background:var(--surface);color:var(--ink);border-radius:14px;padding:22px;width:100%;max-width:380px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+  .modal h3{margin:0 0 8px;font-size:17px}
+  .modal p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+  .modal .btn-row{justify-content:flex-end;margin-top:18px}
+  @keyframes mfade{from{opacity:0}to{opacity:1}}
 
   footer{color:var(--muted);font-size:12.5px;padding:30px 0 50px;text-align:center;border-top:1px solid var(--line);margin-top:30px}
   .hidden{display:none!important}
@@ -493,7 +510,7 @@ const api = {
     return {orderId: order.orderId, totalAmount: order.totalAmount, status: order.status};
   },
   async myOrders(){
-    if(!CONFIG.USE_MOCK) return http('GET','/orders');
+    if(!CONFIG.USE_MOCK){ const hidden=hiddenOrders.get(); return (await http('GET','/orders')||[]).filter(o=>!hidden.includes(Number(o.orderId))); }
     const s = session.get(); if(!s) throw new Error('로그인이 필요합니다.');
     return MOCK.orders().filter(o=>o.userId===s.user.id).sort((a,b)=>b.orderId-a.orderId);
   },
@@ -520,6 +537,24 @@ const api = {
     MOCK.saveOrders(orders);
     return {orderId:o.orderId, amount:o.totalAmount, status:'PAID'};
   },
+  /* 주문 내역 삭제
+     · 목 모드: 실제로 삭제
+     · 실제 API: DELETE /orders/:id 호출. 백엔드에 아직 삭제 API가 없으면(404·405)
+       이 기기의 주문 목록에서만 숨김 → { hiddenOnly:true } */
+  async deleteOrder(id){
+    if(!CONFIG.USE_MOCK){
+      try{ await httpJson('DELETE','/orders/'+encodeURIComponent(id)); return {deleted:true}; }
+      catch(e){
+        if(e.status===404 || e.status===405 || e.status===501){ hiddenOrders.add(id); return {hiddenOnly:true}; }
+        throw e;
+      }
+    }
+    const s = session.get(); if(!s) throw new Error('로그인이 필요합니다.');
+    const orders = MOCK.orders(); const i = orders.findIndex(x=>x.orderId===Number(id) && x.userId===s.user.id);
+    if(i<0) throw new Error('주문을 찾을 수 없습니다.');
+    orders.splice(i,1); MOCK.saveOrders(orders);
+    return {deleted:true};
+  },
   async payment(id){
     if(!CONFIG.USE_MOCK) return http('GET','/orders/'+encodeURIComponent(id)+'/payment');
     const o = MOCK.orders().find(x=>x.orderId===Number(id));
@@ -529,6 +564,11 @@ const api = {
 };
 
 /* ===================== 세션 / 장바구니 ===================== */
+const hiddenOrders = {
+  key(){ const s=LS.get('ohpang_session',null); return 'ohpang_hidden_orders_'+(s&&s.user?(s.user.email||s.user.id):'guest'); },
+  get(){ return LS.get(this.key(), []); },
+  add(id){ const l=this.get(); if(!l.includes(Number(id))){ l.push(Number(id)); LS.set(this.key(), l); } },
+};
 const session = {
   get(){ return LS.get('ohpang_session', null); },
   set(s){ LS.set('ohpang_session', s); },
@@ -868,7 +908,7 @@ function viewLogin(v){
   v.innerHTML=`<div class="panel" style="max-width:420px;margin:30px auto">
     <h2>로그인</h2><div class="sub">Oh!Pang 계정으로 로그인하세요.</div>
     <label class="fld">이메일</label><input class="inp" id="lgEmail" type="email" placeholder="you@example.com" value="${CONFIG.USE_MOCK?'demo@ohpang.shop':''}">
-    <label class="fld">비밀번호</label><input class="inp" id="lgPw" type="password" placeholder="비밀번호" value="${CONFIG.USE_MOCK?'demo1234':''}">
+    <label class="fld">비밀번호</label>${pwField('lgPw','비밀번호',CONFIG.USE_MOCK?'demo1234':'')}
     <div id="lgMsg"></div>
     <button class="btn primary block" style="margin-top:16px" onclick="doLogin()">로그인</button>
     <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--muted)">
@@ -899,7 +939,7 @@ function viewRegister(v){
   v.innerHTML=`<div class="panel" style="max-width:420px;margin:30px auto">
     <h2>회원가입</h2><div class="sub">간단한 정보로 Oh!Pang 회원이 되어 보세요.</div>
     <label class="fld">이메일</label><input class="inp" id="rgEmail" type="email" placeholder="you@example.com">
-    <label class="fld">비밀번호</label><input class="inp" id="rgPw" type="password" placeholder="8자 이상 권장">
+    <label class="fld">비밀번호</label>${pwField('rgPw','8자 이상 권장','')}
     <label class="fld">이름</label><input class="inp" id="rgName" type="text" placeholder="홍길동">
     <div id="rgMsg"></div>
     <button class="btn primary block" style="margin-top:16px" onclick="doRegister()">가입하기</button>
@@ -1029,7 +1069,8 @@ async function viewMypage(v){
         <td>${esc(o.items[0]?o.items[0].name:'')}${o.items.length>1?` 외 ${o.items.length-1}건`:''}</td>
         <td>${won(o.totalAmount)}</td>
         <td>${statusBadge(o.status)}</td>
-        <td><button class="btn ghost sm" onclick="go('/order/${o.orderId}')">상세</button></td>
+        <td style="white-space:nowrap"><button class="btn ghost sm" onclick="go('/order/${o.orderId}')">상세</button>
+          <button class="btn danger sm" onclick="doDeleteOrder(${o.orderId}, '${o.status}')">삭제</button></td>
       </tr>`).join('')}
     </table>`:'<div class="empty"><div class="ico">📦</div><p>주문 내역이 없습니다.</p></div>'}
   </div>`;
@@ -1053,6 +1094,7 @@ async function viewOrderDetail(v, id){
     <h3 style="font-size:15px;margin:18px 0 6px">주문 상품</h3>
     ${o.items.map(it=>`<div class="sumline"><span style="display:flex;align-items:center"><span class="mini">${productImg(it)}</span>${esc(it.name)} × ${it.quantity}</span><span>${won(it.price*it.quantity)}</span></div>`).join('')}
     <div class="sumline total"><span>결제금액</span><span>${won(o.totalAmount)}</span></div>
+    <div class="btn-row" style="justify-content:flex-end"><button class="btn danger sm" onclick="doDeleteOrder(${o.orderId}, '${o.status}', true)">🗑 주문 내역 삭제</button></div>
   </div>
   <div class="panel"><h2 style="font-size:17px">배송지</h2>
     <textarea class="inp" id="odAddr" rows="2">${esc(o.shippingAddress)}</textarea>
@@ -1067,6 +1109,48 @@ async function doUpdateAddress(id){
   if(!addr){ msg.innerHTML='<div class="notice err">배송지를 입력해 주세요.</div>'; return; }
   try{ await api.updateAddress(id, addr); msg.innerHTML='<div class="notice ok">배송지가 변경되었습니다.</div>'; }
   catch(e){ msg.innerHTML=`<div class="notice err">${esc(e.message)}</div>`; }
+}
+
+/* ===================== 주문 삭제 ===================== */
+async function doDeleteOrder(id, status, fromDetail){
+  const extra = status==='PENDING' ? '<br>결제하지 않은 주문이라 삭제하면 다시 결제할 수 없어요.' : '';
+  const ok = await confirmBox('주문 내역을 삭제할까요?', `주문번호 #${id} 주문이 내역에서 사라지고, 되돌릴 수 없어요.${extra}`, '삭제');
+  if(!ok) return;
+  try{
+    const r = await api.deleteOrder(id);
+    toast(r.hiddenOnly ? '주문 내역에서 숨겼어요 (서버 삭제 기능 준비 중)' : '주문 내역을 삭제했어요');
+    if(fromDetail) go('/mypage'); else render();
+  }catch(e){ toast(e.message || '삭제하지 못했어요'); }
+}
+
+/* ===================== 확인 창 ===================== */
+function confirmBox(title, message, okLabel='확인'){
+  return new Promise(resolve=>{
+    const m=document.createElement('div'); m.className='modal-mask';
+    m.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+      <h3>${esc(title)}</h3><p>${message}</p>
+      <div class="btn-row"><button class="btn ghost sm" data-r="0">취소</button><button class="btn danger-fill sm" data-r="1">${esc(okLabel)}</button></div></div>`;
+    const done=v=>{ m.remove(); document.removeEventListener('keydown',onKey); resolve(v); };
+    const onKey=e=>{ if(e.key==='Escape') done(false); };
+    m.addEventListener('click',e=>{ if(e.target===m) done(false); const r=e.target.closest('[data-r]'); if(r) done(r.dataset.r==='1'); });
+    document.addEventListener('keydown',onKey);
+    document.body.appendChild(m); m.querySelector('[data-r="1"]').focus();
+  });
+}
+
+/* ===================== 비밀번호 보기 버튼 ===================== */
+const EYE_OPEN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17.6 17.6 0 0 1-2.9 3.9M6.6 6.6A17.4 17.4 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M2 2l20 20"/></svg>';
+function pwField(id, placeholder, value){
+  return `<div class="pw-wrap"><input class="inp" id="${id}" type="password" placeholder="${esc(placeholder)}" value="${esc(value)}" autocomplete="${id==='rgPw'?'new-password':'current-password'}">
+    <button type="button" class="pw-eye" onclick="togglePw('${id}',this)" aria-label="비밀번호 보기" aria-pressed="false" title="비밀번호 보기">${EYE_OPEN}</button></div>`;
+}
+function togglePw(id, btn){
+  const inp=document.getElementById(id); const show=inp.type==='password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = show ? EYE_OFF : EYE_OPEN;
+  btn.setAttribute('aria-pressed', show); btn.setAttribute('aria-label', show?'비밀번호 숨기기':'비밀번호 보기'); btn.title = show?'비밀번호 숨기기':'비밀번호 보기';
+  inp.focus(); const n=inp.value.length; inp.setSelectionRange(n,n);
 }
 
 /* ===================== toast ===================== */
