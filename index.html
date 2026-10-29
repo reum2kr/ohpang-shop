@@ -415,6 +415,100 @@
     .catrail{gap:6px}
     .bn-stk.a{left:-8px;width:40px;height:40px}
   }
+
+  /* ===================================================================
+     배송 조회 페이지 (시안: 배송 중인 소중한 선물, 어디쯤 있을까요?)
+     =================================================================== */
+  .ta-gift{width:62px;height:52px;margin-right:12px;flex-shrink:0;filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))}
+  .stk{filter:drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 3px 4px rgba(40,30,80,.18))}
+  .trk{margin-top:22px}
+  .trk-hero{position:relative;height:352px;background:#f6c9dc;overflow:hidden;box-shadow:0 4px 16px rgba(90,70,170,.1);color:#1f1640}
+  .trk-arch{position:absolute;left:50%;top:-40px;width:620px;height:520px;transform:translateX(-50%);border-radius:50%;background:#c9d6f8}
+  .trk-title{position:relative;z-index:2;margin:0;padding-top:26px;text-align:center;font-size:37px;line-height:1.28;font-weight:900;letter-spacing:-1px}
+  .trk-title span:not(.eyes){text-shadow:2px 0px 0 #2b2550,-2px 0px 0 #2b2550,0px 2px 0 #2b2550,0px -2px 0 #2b2550,2px 2px 0 #2b2550,-2px 2px 0 #2b2550,2px -2px 0 #2b2550,-2px -2px 0 #2b2550,1px 2.5px 0 #2b2550,-1px 2.5px 0 #2b2550,0 5px 0 rgba(255,255,255,.8)}
+  .trk-title .m{color:#9fe8c8} .trk-title .p{color:#ffb3cf} .trk-title .y{color:#fff3a6}
+  .eyes{display:inline-flex;gap:2px;vertical-align:middle;margin:0 6px}
+  .eyes i{display:block;width:21px;height:25px;border-radius:50%;background:#fff;border:2px solid #2b2550;position:relative}
+  .eyes i::after{content:"";position:absolute;width:11px;height:13px;border-radius:50%;background:#1f1640;right:2px;top:5px}
+  .eyes.s i{width:15px;height:17px} .eyes.s i::after{width:8px;height:9px;top:3px}
+  .trk .spk{position:absolute;z-index:3;color:#fff;font-size:22px;line-height:1;-webkit-text-stroke:1.4px #2b2550;pointer-events:none}
+  .trk .spk.y{color:#ffe36e} .trk .spk.v{color:#c9b8ff}
+  .trk-steps{position:absolute;z-index:2;left:80px;right:80px;bottom:56px;height:162px;display:flex;list-style:none;margin:0;padding:0}
+  .trk-steps li{position:relative;flex:1;margin-left:-27px;background:#2b2550;padding:2.5px;
+    clip-path:polygon(0 0,calc(100% - 30px) 0,100% 50%,calc(100% - 30px) 100%,0 100%,30px 50%)}
+  .trk-steps li:first-child{margin-left:0;clip-path:polygon(0 0,calc(100% - 30px) 0,100% 50%,calc(100% - 30px) 100%,0 100%)}
+  .trk-steps li:last-child{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,30px 50%)}
+  .trk-steps .in{height:100%;background:var(--sc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding-left:22px;
+    clip-path:polygon(0 0,calc(100% - 29px) 0,100% 50%,calc(100% - 29px) 100%,0 100%,29px 50%)}
+  .trk-steps li:first-child .in{padding-left:0;clip-path:polygon(0 0,calc(100% - 29px) 0,100% 50%,calc(100% - 29px) 100%,0 100%)}
+  .trk-steps li:last-child .in{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,29px 50%)}
+  .trk-steps b{font-size:21px;font-weight:900;letter-spacing:-.5px;color:#1f1640}
+  .trk-steps svg{height:64px;width:auto;display:block}
+  .trk-steps li.todo .in>*{opacity:.38;filter:grayscale(.7)}
+  .trk-steps li.now .in{box-shadow:inset 0 0 0 4px rgba(255,255,255,.75)}
+  .trk-now{position:relative;display:inline-block;background:#ff5c8a;color:#fff;font-weight:900;font-size:13px;
+    padding:5px 11px;border-radius:14px;border:2.5px solid #2b2550;white-space:nowrap;box-shadow:0 0 0 3px #fff;animation:trkBob 1.6s ease-in-out infinite}
+  @keyframes trkBob{50%{transform:translateY(-3px)}}
+  .trk-steps .in{gap:8px}
+  .trk-steps li.now .trk-now{margin-top:-6px;margin-bottom:-4px;font-size:12px;padding:3px 10px;box-shadow:none;border-width:2px}
+  @media (prefers-reduced-motion:reduce){.trk-now{animation:none}}
+  .yes{display:inline-block;margin-left:-26px;margin-top:22px;transform:rotate(-12deg);background:#c9b8ff;color:#2b2550;border:2.5px solid #2b2550;border-radius:16px;
+    padding:2px 10px;font:900 italic 20px/1.1 "Arial Black",system-ui,sans-serif;box-shadow:0 0 0 3px #fff;position:relative;z-index:2}
+  .burst{display:flex;align-items:flex-start}
+  .trk .st-courier{position:absolute;z-index:4;left:26px;bottom:24px;width:74px}
+  .trk .st-heart{position:absolute;z-index:4;left:258px;bottom:22px;width:40px;transform:rotate(-8deg)}
+  .trk .st-dog{position:absolute;z-index:4;left:66%;bottom:14px;width:56px;transform:rotate(6deg)}
+  .trk .st-box{position:absolute;z-index:4;right:28px;bottom:16px;width:60px;transform:rotate(-6deg)}
+  .trk .st-smile{position:absolute;z-index:4;right:66px;top:104px;width:46px;transform:rotate(10deg)}
+  .trk-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:30px 0 10px;align-items:start}
+  .trk-log{position:relative;background:var(--surface);border:2.5px solid #2b2550;border-radius:18px;padding:26px 22px 18px}
+  .tape2{position:absolute;left:22px;top:-12px;width:88px;height:22px;transform:rotate(-4deg);opacity:.95;
+    background:var(--tape,#cdb8ff);background-image:radial-gradient(rgba(255,255,255,.75) 1.3px,transparent 1.7px);background-size:7px 7px;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+  .trk-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);margin-bottom:14px;padding-bottom:12px;border-bottom:1.5px dashed var(--line)}
+  .trk-meta b{color:var(--ink)}
+  .trk-eta{display:inline-block;background:#e6f9f1;color:#137a55;font-weight:900;border-radius:10px;padding:4px 10px;font-size:13.5px;margin-bottom:12px}
+  .trk-tl{list-style:none;margin:0;padding:0;position:relative}
+  .trk-tl::before{content:"";position:absolute;left:6px;top:12px;bottom:12px;width:2px;background:#cfeee2}
+  .trk-tl li{position:relative;padding:5px 0 5px 26px;font-size:15.5px;line-height:1.45;color:var(--ink)}
+  .trk-tl li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:10px;border-radius:50%;background:#e6f9f1;border:2px solid #4fbf95}
+  .trk-tl li.now::before{background:#ff7a9c;border-color:#ff7a9c;box-shadow:0 0 0 4px rgba(255,122,156,.22)}
+  .trk-tl li.now{font-weight:800}
+  .trk-tl .tm{font-variant-numeric:tabular-nums;margin-right:4px}
+  .trk-tl .en{color:var(--muted);font-weight:500}
+  .trk-tl .pl{display:block;font-size:12px;color:var(--muted);font-weight:500}
+  .trk-log .st-hearts{position:absolute;right:18px;top:22px;width:46px}
+  .trk-side h3{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:18px;font-weight:900}
+  .trk-side h3::before{content:"";width:5px;height:20px;border-radius:3px;background:linear-gradient(180deg,#ff7aa2,#ffb36b)}
+  .trk-bubble{position:relative;background:#dbe6ff;border:2.5px solid #2b2550;border-radius:28px;padding:14px 26px;font-size:18px;font-weight:700;margin-bottom:24px;color:#1f1640}
+  .trk-bubble::after{content:"";position:absolute;left:34px;bottom:-11px;width:16px;height:16px;background:#dbe6ff;border-right:2.5px solid #2b2550;border-bottom:2.5px solid #2b2550;transform:rotate(45deg)}
+  .trk-gem{position:absolute;right:-10px;top:-22px;width:40px}
+  .trk-info{display:flex;gap:14px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:24px}
+  .trk-info .av{width:58px;flex-shrink:0}
+  .trk-info dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:14px}
+  .trk-info dt{color:var(--muted)} .trk-info dd{margin:0;font-weight:700}
+  .trk-items{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 16px}
+  .trk-items .sumline{font-size:14px}
+  .trk-pending{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px;font-size:14px}
+  .trk-rail{top:0}
+  .trk-rail .pola{cursor:default}
+  .trk-rail .pola-list{gap:16px}
+  .trk-find{display:flex;gap:8px;max-width:420px;margin:12px auto 0}
+  @media(max-width:860px){
+    .trk-hero{height:auto;padding-bottom:22px}
+    .trk-arch{width:420px;height:380px}
+    .trk-title{font-size:25px;padding:22px 12px 0}
+    .eyes i{width:16px;height:19px} .eyes i::after{width:8px;height:10px;top:4px}
+    .trk-steps{position:relative;left:auto;right:auto;bottom:auto;height:auto;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 14px 0}
+    .trk-steps li,.trk-steps li:first-child,.trk-steps li:last-child{margin:0;clip-path:none;border-radius:14px}
+    .trk-steps .in,.trk-steps li:first-child .in,.trk-steps li:last-child .in{clip-path:none;border-radius:12px;padding:12px 6px;gap:6px}
+    .trk-steps b{font-size:16px} .trk-steps svg{height:44px}
+    .trk-steps li.now{box-shadow:0 0 0 3px #ff5c8a}
+    .trk .st-courier,.trk .st-heart,.trk .st-dog,.trk .st-box,.trk .st-smile{display:none}
+    .trk .spk{display:none}
+    .trk-tl .en{display:none}
+    .trk-grid{grid-template-columns:1fr;gap:22px}
+    .yes{font-size:15px}
+  }
 </style>
 </head>
 <body>
@@ -430,6 +524,7 @@
         <span class="spark" style="right:17%;top:46px;font-size:10px">◌</span>
       </a>
       <a class="ta ta-r" onclick="go('/product/112')" aria-label="견과 선물세트 보기">
+        <svg class="ta-gift" viewBox="0 0 64 54" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.4" stroke-linejoin="round"><rect x="10" y="22" width="44" height="28" rx="2" fill="#9fe3c4"/><rect x="6" y="14" width="52" height="10" rx="2" fill="#c4f2df"/><rect x="28" y="14" width="8" height="36" fill="#ff8fb0"/><path d="M32 14c-5-11-17-10-14-3 2 4 9 3 14 3zM32 14c5-11 17-10 14-3-2 4-9 3-14 3z" fill="#ff8fb0"/></g></svg>
         <span class="ta-txt"><b>선물하기 좋은 견과세트</b></span>
         <span class="ta-chev">›</span>
       </a>
@@ -443,7 +538,7 @@
         <img class="lg-dark" src="images/v2/logo-dark.png" alt="Oh!Pang">
         <span class="stk-badge" aria-hidden="true">20-30<br>PICK!</span>
       </a>
-      <form class="search" onsubmit="event.preventDefault();doSearch(this.q.value)">
+      <form class="search" onsubmit="event.preventDefault();onHeaderSearch(this.q.value)">
         <input name="q" placeholder="찾으시는 상품을 검색해 보세요" autocomplete="off">
         <button type="submit">🔍 검색</button>
       </form>
@@ -746,6 +841,7 @@ let curCat='전체';
 async function render(){
   clearInterval(bnTimer); clearInterval(adTimer);
   syncChrome();
+  const sq=document.querySelector('.search input'); if(sq) sq.placeholder=(location.hash||'').startsWith('#/tracking')?'배송 정보 조회 (주문번호 입력)':'찾으시는 상품을 검색해 보세요';
   const v=document.getElementById('view');
   const raw=(location.hash.slice(1)||'/');
   const [base,arg]=raw.split('?');
@@ -764,6 +860,7 @@ async function render(){
     if(base.startsWith('/pay/')) return await viewPay(v, base.split('/')[2]);
     if(base==='/mypage') return await viewMypage(v);
     if(base.startsWith('/order/')) return await viewOrderDetail(v, base.split('/')[2]);
+    if(base==='/tracking'||base.startsWith('/tracking/')) return await viewTracking(v, base.split('/')[2]);
     v.innerHTML='<div class="panel"><h2>페이지를 찾을 수 없습니다</h2></div>';
   }catch(e){
     v.innerHTML=`<div class="panel"><div class="notice err">${esc(e.message)}</div><button class="btn ghost" onclick="go('/')">홈으로</button></div>`;
@@ -793,7 +890,7 @@ function renderCatRail(){
   const rail=document.getElementById('catRail'); if(!rail) return;
   rail.innerHTML=CATS.map(c=>{ const [ic,bg,fg]=CAT_STYLE[c]||['•','#eee','#333'];
       return `<button class="${c===curCat?'on':''}" style="--cbg:${bg};--cfg:${fg}" onclick="selectCat('${c}')"><span class="ci">${ic}</span>${c}</button>`; }).join('')
-    + `<span class="quick"></span><button class="qk" onclick="selectCat('가전디지털')">디지털</button><button class="qk" onclick="doSearch('선물')">선물추천</button>`;
+    + `<span class="quick"></span><button class="qk" onclick="go('/tracking')">🚚 배송조회</button><button class="qk" onclick="doSearch('선물')">선물추천</button>`;
 }
 function selectCat(c){ curCat=c; go(c==='전체'?'/':('/products?category='+encodeURIComponent(c))); }
 function doSearch(q){ curCat='전체'; go('/search?q='+encodeURIComponent(q||'')); }
@@ -1197,7 +1294,7 @@ async function viewPayResult(v, id){
     ${ok?`<p style="color:var(--muted)">주문번호 <b>#${pay.orderId}</b> · 결제금액 <b>${won(pay.amount)}</b></p>`
          :`<div class="notice err" style="display:inline-block">${esc(err||'결제를 완료하지 못했습니다. 다시 시도해 주세요.')}</div>`}
     <div class="btn-row" style="justify-content:center">
-      ${ok?`<button class="btn primary" onclick="go('/order/${pay.orderId}')">주문 상세 보기</button>`
+      ${ok?`<button class="btn primary" onclick="go('/tracking/${pay.orderId}')">🚚 배송 조회</button><button class="btn ghost" onclick="go('/order/${pay.orderId}')">주문 상세 보기</button>`
           :`<button class="btn primary" onclick="go('/pay/${id}')">다시 결제</button>`}
       <button class="btn ghost" onclick="go('/')">계속 쇼핑하기</button>
     </div>
@@ -1227,7 +1324,7 @@ async function viewMypage(v){
         <td>${esc(o.items[0]?o.items[0].name:'')}${o.items.length>1?` 외 ${o.items.length-1}건`:''}</td>
         <td>${won(o.totalAmount)}</td>
         <td>${statusBadge(o.status)}</td>
-        <td style="white-space:nowrap"><button class="btn ghost sm" onclick="go('/order/${o.orderId}')">상세</button>
+        <td style="white-space:nowrap">${o.status==='PAID'?`<button class="btn ghost sm" onclick="go('/tracking/${o.orderId}')">배송조회</button> `:''}<button class="btn ghost sm" onclick="go('/order/${o.orderId}')">상세</button>
           <button class="btn danger sm" onclick="doDeleteOrder(${o.orderId}, '${o.status}')">삭제</button></td>
       </tr>`).join('')}
     </table>`:'<div class="empty"><div class="ico">📦</div><p>주문 내역이 없습니다.</p></div>'}
@@ -1252,7 +1349,7 @@ async function viewOrderDetail(v, id){
     <h3 style="font-size:15px;margin:18px 0 6px">주문 상품</h3>
     ${o.items.map(it=>`<div class="sumline"><span style="display:flex;align-items:center"><span class="mini">${productImg(it)}</span>${esc(it.name)} × ${it.quantity}</span><span>${won(it.price*it.quantity)}</span></div>`).join('')}
     <div class="sumline total"><span>결제금액</span><span>${won(o.totalAmount)}</span></div>
-    <div class="btn-row" style="justify-content:flex-end"><button class="btn danger sm" onclick="doDeleteOrder(${o.orderId}, '${o.status}', true)">🗑 주문 내역 삭제</button></div>
+    <div class="btn-row" style="justify-content:flex-end">${o.status==='PAID'?`<button class="btn primary sm" onclick="go('/tracking/${o.orderId}')">🚚 배송 조회</button>`:''}<button class="btn danger sm" onclick="doDeleteOrder(${o.orderId}, '${o.status}', true)">🗑 주문 내역 삭제</button></div>
   </div>
   <div class="panel"><h2 style="font-size:17px">배송지</h2>
     <textarea class="inp" id="odAddr" rows="2">${esc(o.shippingAddress)}</textarea>
@@ -1313,6 +1410,155 @@ function togglePw(id, btn){
 
 /* ===================== toast ===================== */
 let toastT;
+
+/* ===================== 뷰: 배송 조회 =====================
+   백엔드에 배송 API가 아직 없어서, 결제 시각을 기준으로 "번개배송" 일정에 맞춰 화면에서 진행 단계를 계산함.
+   백엔드가 주문 응답에 tracking 필드를 넣어 주면 그 값을 그대로 사용:
+     tracking: { step: 0~3, invoiceNo, eta, courier:{name, phone, message},
+                 events:[{ time, title, en, place }] }   (events는 최신순) */
+const TRK_ICON = {
+  gift:`<svg viewBox="0 0 64 64" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.6" stroke-linejoin="round"><rect x="11" y="27" width="42" height="30" rx="2" fill="#a8e6cf"/><rect x="7" y="18" width="50" height="11" rx="2" fill="#c4f2df"/><rect x="28" y="18" width="8" height="39" fill="#ff9fb8"/><path d="M32 18c-5-11-17-10-14-3 2 4 9 3 14 3zM32 18c5-11 17-10 14-3-2 4-9 3-14 3z" fill="#ff9fb8"/></g></svg>`,
+  truck:`<svg viewBox="0 0 84 56" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M3 16h11M0 24h14M5 32h9" stroke="#ff8f7a"/><rect x="18" y="9" width="38" height="30" rx="3" fill="#ff9a8a"/><path d="M56 18h13l9 11v10H56z" fill="#5fb3a8"/><path d="M60 21h8l6 8H60z" fill="#dff4ff"/><circle cx="31" cy="42" r="6.5" fill="#3a3550"/><circle cx="67" cy="42" r="6.5" fill="#3a3550"/></g><circle cx="31" cy="42" r="2" fill="#fff"/><circle cx="67" cy="42" r="2" fill="#fff"/></svg>`,
+  map:`<svg viewBox="0 0 100 72" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.4" stroke-linejoin="round"><path d="M4 14l28-7 32 7 30-7v52l-30 7-32-7-28 7z" fill="#dcf3cf"/><path d="M32 7v52M64 14v52" fill="none" stroke-width="1.6"/></g><path d="M6 44l30-12 24 14 32-20" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M6 44l30-12 24 14 32-20" fill="none" stroke="#f6c84b" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 6"/><g stroke="#1f1640" stroke-width="2.4" stroke-linejoin="round"><path d="M70 3c-7 0-12 5-12 11 0 8 12 19 12 19s12-11 12-19c0-6-5-11-12-11z" fill="#ff6b6b"/><circle cx="70" cy="14" r="4" fill="#fff"/><path d="M50 62v-7l6-7h17l7 7h6v7z" fill="#b7b0ff"/><path d="M58 50h13l4 5H55z" fill="#eef3ff"/><circle cx="59" cy="63" r="4.5" fill="#3a3550"/><circle cx="78" cy="63" r="4.5" fill="#3a3550"/></g><path d="M36 53h10M39 59h8" stroke="#1f1640" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  burst:`<svg viewBox="0 0 64 64" aria-hidden="true"><polygon points="32.0,2.0 36.2,13.5 45.0,5.0 43.8,17.1 55.5,13.3 49.1,23.8 61.2,25.3 51.0,32.0 61.2,38.7 49.1,40.2 55.5,50.7 43.8,46.9 45.0,59.0 36.2,50.5 32.0,62.0 27.8,50.5 19.0,59.0 20.2,46.9 8.5,50.7 14.9,40.2 2.8,38.7 13.0,32.0 2.8,25.3 14.9,23.8 8.5,13.3 20.2,17.1 19.0,5.0 27.8,13.5" fill="#fff36b" stroke="#1f1640" stroke-width="2.2" stroke-linejoin="round"/></svg>`,
+};
+const TRK_STK = {
+  courier:`<svg class="stk st-courier" viewBox="0 0 64 64" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.4" stroke-linejoin="round"><circle cx="32" cy="37" r="20" fill="#ffd9c2"/><path d="M11 31c0-15 9-21 21-21s21 6 21 21z" fill="#6dbf73"/><path d="M38 29h20c2.5 0 2.5 4.5 0 4.5H38z" fill="#58a860"/><circle cx="32" cy="21" r="5.5" fill="#e9f59b"/></g><circle cx="25" cy="39" r="2.2" fill="#1f1640"/><circle cx="39" cy="39" r="2.2" fill="#1f1640"/><path d="M26 46q6 5 12 0" stroke="#1f1640" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="20" cy="45" r="3" fill="#ff9fb0" opacity=".6"/><circle cx="44" cy="45" r="3" fill="#ff9fb0" opacity=".6"/></svg>`,
+  heart:`<svg class="stk st-heart" viewBox="0 0 48 44" aria-hidden="true"><path d="M24 41S3 28 3 14C3 7 8 3 14 3c5 0 8 3 10 6 2-3 5-6 10-6 6 0 11 4 11 11 0 14-21 27-21 27z" fill="#ff5c7a" stroke="#1f1640" stroke-width="2.4" stroke-linejoin="round"/><path d="M11 11q2-4 6-4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".8"/></svg>`,
+  dog:`<svg class="stk st-dog" viewBox="0 0 64 64" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.4" stroke-linejoin="round"><path d="M10 6l16 18-12 7zM54 6L38 24l12 7z" fill="#b97a3e"/><ellipse cx="32" cy="38" rx="21" ry="19" fill="#d99a5b"/><ellipse cx="32" cy="46" rx="11" ry="8.5" fill="#f6e1c6"/></g><circle cx="24" cy="35" r="2.8" fill="#1f1640"/><circle cx="40" cy="35" r="2.8" fill="#1f1640"/><ellipse cx="32" cy="42.5" rx="3.4" ry="2.4" fill="#1f1640"/><path d="M32 45v3m-4 1q4 3 8 0" stroke="#1f1640" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+  box:`<svg class="stk st-box" viewBox="0 0 64 64" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.4" stroke-linejoin="round"><path d="M32 8l24 10v28L32 58 8 46V18z" fill="#d9a066"/><path d="M32 8l24 10-24 10L8 18z" fill="#ecbd84"/><path d="M32 28v30" fill="none"/><path d="M19 13l25 10v8" fill="none" stroke="#a8743c"/></g><path d="M38 44l12-5v6l-12 5z" fill="#fff" opacity=".85"/></svg>`,
+  hearts:`<svg class="stk st-hearts" viewBox="0 0 48 56" aria-hidden="true"><path d="M30 30S12 20 12 9c0-5 4-8 8-8 4 0 7 2 10 6 3-4 6-6 10-6 4 0 8 3 8 8 0 11-18 21-18 21z" fill="#ff7a9c" stroke="#1f1640" stroke-width="2.2" stroke-linejoin="round"/><path d="M14 54S2 47 2 39c0-3 3-6 6-6 3 0 5 2 6 4 1-2 3-4 6-4 3 0 6 3 6 6 0 8-12 15-12 15z" fill="#ff9fb8" stroke="#1f1640" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  gem:`<svg class="stk trk-gem" viewBox="0 0 48 40" aria-hidden="true"><g stroke="#1f1640" stroke-width="2.2" stroke-linejoin="round"><path d="M10 3h28l8 11-22 24L2 14z" fill="#c9b8ff"/><path d="M2 14h44M17 3l-4 11 11 24 11-24-4-11" fill="none"/></g><path d="M12 9l3-3" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+};
+const TRK_STEPS = [
+  {label:'주문 완료', icon:'gift',  sc:'#ffe3ee'},
+  {label:'출고 완료', icon:'truck', sc:'#e1dcff'},
+  {label:'배송 중',   icon:'map',   sc:'#c9f0e1'},
+  {label:'배송 완료', icon:'burst', sc:'#a6e7cc'},
+];
+// 번개배송 일정 (결제 후 분, 단계, 내용)
+const TRK_PLAN = [
+  [0,   0, '결제 완료',      'Payment Confirmed',   '오팡 주문센터'],
+  [12,  0, '상품 포장 완료', 'Packed',              '오팡 이천 물류센터'],
+  [25,  1, '물류센터 출고',  'Shipped',             '오팡 이천 물류센터'],
+  [55,  2, '간선 상차',      'Line-haul Departure', '오팡 이천 허브'],
+  [95,  2, '지역 간선 도착', 'Local Hub Arrival',   '{region} 캠프'],
+  [125, 2, '배송 출발',      'Out for Delivery',    '{region} 캠프'],
+  [240, 3, '배송 완료',      'Delivered',           '고객님 문 앞'],
+];
+const COURIERS = ['김하늘','박도윤','이서준','최유나','정민재','한지우'];
+
+function trkTime(t){
+  const d=new Date(t), now=new Date();
+  const day=new Date(d.getFullYear(),d.getMonth(),d.getDate()), today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const diff=Math.round((today-day)/864e5);
+  const hm=d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false});
+  const dl=diff===0?'오늘':diff===1?'어제':diff===-1?'내일':`${d.getMonth()+1}/${d.getDate()}`;
+  return `${dl} ${hm}`;
+}
+function buildTracking(o, paidAt){
+  const id=Number(o.orderId);
+  const created=new Date(o.createdAt||Date.now()).getTime();
+  const tr=o.tracking;
+  if(tr && Array.isArray(tr.events)){
+    return { step:Number(tr.step||0), events:tr.events.map(e=>({t:new Date(e.time).getTime(), title:e.title, en:e.en||'', place:e.place||''})),
+      invoiceNo:tr.invoiceNo||'-', eta:tr.eta?new Date(tr.eta).getTime():null,
+      courier:tr.courier||null, pending:false };
+  }
+  const invoiceNo='OP'+new Date(created).toISOString().slice(2,10).replace(/-/g,'')+String(id).padStart(6,'0');
+  const events=[{t:created, title:'주문 접수', en:'Order Received', place:'Oh!Pang'}];
+  if(o.status!=='PAID') return {step:-1, events, invoiceNo, eta:null, courier:null, pending:true};
+  const t0=new Date(paidAt||o.paidAt||o.updatedAt||o.createdAt||Date.now()).getTime();
+  const addr=String(o.shippingAddress||'').replace(/^[^/]*\/\s*/,'').trim().split(/\s+/);
+  const region=(addr.length>=2 && /[시도]$/.test(addr[0])) ? addr[0].replace(/(특별|광역)?시$|도$/,'')+' '+addr[1] : '우리 동네';
+  const now=Date.now(); let step=0;
+  for(const [m,s,title,en,place] of TRK_PLAN){
+    const t=t0+m*60000; if(t>now) break;
+    events.push({t, title, en, place:place.replace('{region}',region)}); step=s;
+  }
+  events.sort((a,b)=>b.t-a.t);
+  const name=COURIERS[id%COURIERS.length];
+  const msg=['상품을 정성껏 포장하고 있어요! 📦','곧 출발합니다! 조금만 기다려 주세요 🚚','소중하게 배달하겠습니다! 😄','문 앞에 놓고 갔어요. 즐거운 하루 되세요! 💐'][step];
+  return { step, events, invoiceNo, eta:t0+240*60000,
+    courier: step>=1 ? {name:name+' 기사님', phone:'050-7'+String(id*37%1000).padStart(3,'0')+'-'+String(1000+id*733%9000).slice(-4)+' (안심번호)', message:msg}
+                     : {name:'배정 중', phone:'출고되면 알려드려요', message:msg},
+    pending:false };
+}
+
+async function viewTracking(v, id){
+  if(!session.get()){ go('/login'); return; }
+  if(!id){
+    const orders=await api.myOrders();
+    const paid=orders.find(o=>o.status==='PAID');
+    if(paid){ location.replace('#/tracking/'+paid.orderId); return; }
+    v.innerHTML=`<div class="panel"><div class="empty"><div class="ico">🚚</div><p>배송 중인 주문이 없어요.</p>
+      <form class="trk-find" onsubmit="event.preventDefault();const n=this.n.value.replace(/\\D/g,'');if(n)go('/tracking/'+n)">
+        <input class="inp" name="n" placeholder="주문번호 입력 (예: 1024)" inputmode="numeric"><button class="btn primary">조회</button></form></div></div>`;
+    return;
+  }
+  const o=await api.order(id);
+  let paidAt=null;
+  if(o.status==='PAID' && !o.paidAt){ try{ const p=await api.payment(id); paidAt=p.paidAt||p.createdAt||null; }catch(e){} }
+  const tr=buildTracking(o, paidAt);
+  const step=tr.step;
+  const title = tr.pending ? `<span class="p">결제가 끝나면</span> <span class="eyes"><i></i><i></i></span><br><span class="m">바로 출발할게요!</span>`
+    : step===3 ? `<span class="m">소중한 선물이</span> <span class="eyes"><i></i><i></i></span><br><span class="eyes s"><i></i><i></i></span><span class="p">도착했어요!</span>`
+    : `<span class="m">배송 중인</span> <span class="p">소중한 선물,</span><span class="eyes"><i></i><i></i></span><br><span class="eyes s"><i></i><i></i></span><span class="p">어디쯤 있을까요?</span>`;
+  const steps=TRK_STEPS.map((s,i)=>{
+    const cls = tr.pending ? 'todo' : i<step ? 'done' : i===step ? 'now' : 'todo';
+    const ico = s.icon==='burst' ? `<span class="burst">${TRK_ICON.burst}${step===3?'<span class="yes">YES!</span>':''}</span>` : TRK_ICON[s.icon];
+    return `<li class="${cls}" style="--sc:${s.sc}"><div class="in">${cls==='now'?'<span class="trk-now">지금 여기!</span>':''}<b>${s.label}</b>${ico}</div></li>`;
+  }).join('');
+  const items=(o.items||[]);
+  const polas=[['courier','오늘 출발!','#f6c26b'],['box','꼼꼼 포장','#c9b8ff'],['couple','선물 도착','#e9f59b'],['unbox','언박싱 타임','#ffb3cf']]
+    .map(([k,cap,tape])=>`<div class="pola"><span class="tape" style="--tape:${tape}"></span><img class="ph" src="images/trk/${k}.jpg" alt=""><span class="cap">${cap}</span></div>`).join('');
+  v.innerHTML=`<div class="crumbs"><a onclick="go('/mypage')">마이페이지</a> › <a onclick="go('/order/${o.orderId}')">주문 상세</a> › 배송 조회</div>
+  <div class="home-wrap trk">
+    <section class="trk-hero" aria-label="배송 진행 단계">
+      <div class="trk-arch"></div>
+      <span class="spk v" style="left:30%;top:42px;font-size:30px">✦</span><span class="spk y" style="left:33.5%;top:30px;font-size:16px">✦</span>
+      <span class="spk y" style="left:9%;top:92px;font-size:24px">✦</span><span class="spk y" style="left:11%;top:118px;font-size:38px">✦</span><span class="spk v" style="left:7.5%;top:142px;font-size:26px">✦</span>
+      <span class="spk" style="right:31%;top:96px;font-size:20px">✦</span><span class="spk" style="right:6%;top:62px;font-size:22px">✧</span><span class="spk" style="right:4.5%;bottom:110px;font-size:20px">✦</span>
+      <h2 class="trk-title">${title}</h2>
+      <ol class="trk-steps">${steps}</ol>
+      ${TRK_STK.courier}${TRK_STK.heart}${TRK_STK.dog}${TRK_STK.box}${SMILE_SVG.replace('SVGCLS','stk st-smile')}
+    </section>
+    <div class="trk-grid">
+      <div class="trk-log">
+        <span class="tape2" style="--tape:#cdb8ff"></span>${TRK_STK.hearts}
+        <div class="trk-meta"><span>주문번호 <b>#${o.orderId}</b></span><span>택배사 <b>오팡 번개배송</b></span><span>운송장 <b>${esc(tr.invoiceNo)}</b></span></div>
+        ${tr.eta&&step<3?`<div class="trk-eta">⚡ ${trkTime(tr.eta)} 도착 예정</div>`:''}
+        <ul class="trk-tl">
+          ${tr.events.map((e,i)=>`<li class="${i===0?'now':''}"><span class="tm">[${trkTime(e.t)}]</span> ${esc(e.title)} ${e.en?`<span class="en">(${esc(e.en)})</span>`:''}${e.place?`<span class="pl">${esc(e.place)}</span>`:''}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="trk-side">
+        ${tr.pending ? `<h3>결제 대기 중</h3>
+          <div class="trk-pending">아직 결제가 완료되지 않았어요. 결제가 끝나면 바로 출고 준비를 시작해요.
+          <div class="btn-row"><button class="btn primary sm" onclick="go('/pay/${o.orderId}')">결제하기</button></div></div>`
+        : `<h3>택배 기사님 한마디</h3>
+          <div class="trk-bubble">${esc(tr.courier.message)}${TRK_STK.gem}</div>
+          <h3>택배 기사님 정보</h3>
+          <div class="trk-info">${TRK_STK.courier.replace('stk st-courier','stk av')}
+            <dl><dt>담당</dt><dd>${esc(tr.courier.name)}</dd><dt>연락처</dt><dd>${esc(tr.courier.phone)}</dd><dt>받는 곳</dt><dd>${esc(o.shippingAddress||'-')}</dd></dl></div>`}
+        <h3>주문 상품</h3>
+        <div class="trk-items">
+          ${items.map(it=>`<div class="sumline"><span style="display:flex;align-items:center"><span class="mini">${productImg(it)}</span>${esc(it.name)} × ${it.quantity}</span><span>${won(it.price*it.quantity)}</span></div>`).join('')}
+          <div class="btn-row" style="justify-content:flex-end;margin-top:8px"><button class="btn ghost sm" onclick="go('/order/${o.orderId}')">주문 상세 보기</button><button class="btn ghost sm" onclick="render()">↻ 새로고침</button></div>
+        </div>
+      </div>
+    </div>
+    <aside class="rail trk-rail" aria-hidden="true"><div class="pola-list">${polas}</div></aside>
+  </div>`;
+}
+function onHeaderSearch(q){
+  const s=String(q||'').trim();
+  const onTrk=(location.hash||'').startsWith('#/tracking');
+  if(/^배송\s*(조회|추적)?$/.test(s)) return go('/tracking');
+  if(onTrk && /^#?\d+$/.test(s)) return go('/tracking/'+s.replace('#',''));
+  doSearch(s);
+}
+
 function toast(msg){
   let el=document.getElementById('toast');
   if(!el){ el=document.createElement('div'); el.id='toast';
