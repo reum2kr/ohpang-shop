@@ -334,15 +334,15 @@
   .whoami b{color:inherit}
 
   /* 카테고리 알약 버튼 */
-  .catrail{height:54px;gap:5px}
-  .catrail button{display:inline-flex;align-items:center;gap:4px;height:38px;padding:0 9px;border-radius:9px;flex-shrink:0;
+  .catrail{height:54px;gap:4px}
+  .catrail button{display:inline-flex;align-items:center;gap:3px;height:38px;padding:0 8px;border-radius:9px;flex-shrink:0;
     background:var(--cbg);color:var(--cfg);font-weight:800;font-size:13.5px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.05)}
   .catrail button .ci{font-size:18px;line-height:1}
   .catrail button:hover{background:var(--cbg);color:var(--cfg);filter:brightness(.97);transform:translateY(-1px)}
   .catrail button.on{background:var(--cbg);color:var(--cfg);box-shadow:inset 0 0 0 2px var(--cfg)}
   .catrail .cdot{display:none}
   .catrail .quick{margin-left:auto}
-  .catrail .qk{background:#ffb3d6!important;color:#7a1a4a!important;border-radius:20px!important;padding:0 14px!important}
+  .catrail .qk{background:#ffb3d6!important;color:#7a1a4a!important;border-radius:20px!important;padding:0 12px!important}
 
   /* 홈: 배너 + 오른쪽 폴라로이드 레일 */
   .wrap{max-width:1072px}
@@ -898,6 +898,8 @@ function doSearch(q){ curCat='전체'; go('/search?q='+encodeURIComponent(q||'')
 /* ===================== 메인 배너 (캐러셀 + 사이드 리스트) ===================== */
 // art: [이모지, 크기(px), left, top, 회전(deg)] — .s-art(420×300) 기준 배치
 const BANNERS = [
+  { key:'everyday', link:'/products?category=전체', img:'images/v2/banner-everyday.jpg', alt:'EVERYDAY ESSENTIALS 20s-30s — 나를 위한, 우리를 위한 스타일',
+    pola:{img:'images/v2/pola-everyday.jpg', cap:'20-30 PICK', tape:'#9fe0d0'} },
   { key:'welcome', link:'/register', pola:{text:'신규회원<br>웰컴딜', tape:'#f6c26b'},
     bg:'radial-gradient(440px 260px at 72% 50%, rgba(255,255,255,.6), transparent 70%),linear-gradient(90deg,#e8edff 0%,#dfe7ff 55%,#d3dfff 100%)',
     accent:'#5a48e0', tag:'🎉 Oh!Pang 신규 회원', h1:'처음 오셨나요?', h2:'웰컴딜 모음전', sub:'가입하고 인기 상품을 특가로 만나보세요',
@@ -913,8 +915,6 @@ const BANNERS = [
     art:[ {img:'c111',w:112,x:40,y:14,r:-6}, {img:'c112',w:240,x:168,y:84,r:4} ],
     deco:'<span class="stamp" style="left:500px;top:16px;color:#c0392b;transform:rotate(-14deg)">ROMA</span><span class="stamp" style="left:420px;bottom:26px;color:#2b6def;transform:rotate(10deg)">SEOUL</span>' },
   { key:'autumn', link:'/products?category=홈/리빙', pola:{img:'images/v2/pola-home.jpg', cap:'환절기 특가', tape:'#ffb3c7'} },
-  { key:'everyday', link:'/products?category=전체', img:'images/v2/banner-everyday.jpg', alt:'EVERYDAY ESSENTIALS 20s-30s — 나를 위한, 우리를 위한 스타일',
-    pola:{img:'images/v2/pola-everyday.jpg', cap:'20-30 PICK', tape:'#9fe0d0'} },
   { key:'kids', link:'/products?category=유아동', pola:{cut:'c118', bg:'#d2f4e0', cap:'키즈 페스타', tape:'#ffd27a'},
     bg:'radial-gradient(440px 260px at 72% 50%, rgba(255,255,255,.55), transparent 70%),linear-gradient(90deg,#e7f8ef 0%,#f3fadf 50%,#fff2c4 100%)',
     accent:'#f08c00', tag:'🧸 베이비&키즈 페스타', h1:'우리 아이 웃음 가득', h2:'키즈 페스타 최대 30%', sub:'장난감·육아용품을 한 번에',
@@ -925,7 +925,7 @@ const BANNERS = [
     h1:'소음은 끄고', h2:'음악은 켜고', sub:'오늘 주문하면 내일 도착',
     art:[ ['🎵',46,40,50,-10], {img:'c101',w:190,x:120,y:22,r:-8}, ['✨',40,335,55,0], ['🎶',42,345,200,0] ] },
 ];
-let bnIdx = 4, bnTimer = null, bnPaused = false;   // 첫 화면: 20·30 메인 배너
+let bnIdx = 0, bnTimer = null, bnPaused = false;   // 첫 화면: 20·30 메인 배너
 
 function slideHTML(b, tiles){
   if(b.img) return `<div class="slide img" onclick="go('${b.link}')"><img src="${b.img}" alt="${esc(b.alt||'')}"></div>`;
